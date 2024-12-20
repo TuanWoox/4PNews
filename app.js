@@ -172,7 +172,9 @@ passport.use('github',passportGithub)
 
 
 //Routes imports
+const generalRoutes = require('./routes/general');
 const accountRoutes = require('./routes/account');
+const userRoutes = require('./routes/user');
 
 //Catch flash message and user!
 app.use((req,res,next) => {
@@ -196,6 +198,8 @@ app.use( async (req, res, next)=>{
 
 //Routes setup
 app.use('/account',accountRoutes);
+app.use('/user', userRoutes);
+app.use('/', generalRoutes);
 
 
 
