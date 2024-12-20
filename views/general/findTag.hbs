@@ -1,0 +1,83 @@
+{{#section 'css'}}
+  <title>{{news.title}}</title>
+  <link rel="stylesheet" href="/stylesheets/general.css">
+{{/section}}
+
+    <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-left align-items-center" id="sub-nav">
+            <div class="logo me-3">
+                {{tag.name}}
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center mb-3">
+        <div id="sub-nav-bot"></div>
+    </div>
+
+{{#if empty}}
+<div class="text-center py-3">
+        <img src="/images/empty-state-image1.png" alt="No items found" class="img-fluid mb-3" style="max-width: 300px;">
+        <h4>No News Available</h4>
+        <p class="text-muted">It seems there are no news articles to display. Check back later!</p>
+    </div>
+   {{else}}
+{{#each listNews}}
+    <div class="d-flex justify-content-center">
+        <div class="card mb-3 margin-post">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="{{thumbnail}}"
+                        class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                                <div>
+                                    <a href="/category/{{category._id}}" class="text-decoration-none"><h5 class="nav-link ps-0">{{category.name}}</h5></a>
+                                </div>
+                                <div>
+                                    {{#if isPremium}}
+                                        <span class="status text-premium">Premium</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        <a href="/detail/{{_id}}" class="nav-link ps-0"><h5>{{title}}</h5></a>
+                        <p class="card-text">{{brief}}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="card-text"><small class="text-muted">Last updated {{timesince publish.publishedDate}}</small></div>
+                            <div>
+                                {{#each tags}}
+                                <a href="/tag/{{_id}}" type="button" class="btn btn-outline-primary mx-1">
+                                    {{name}}
+                                </a>
+                            {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/each}}
+
+<br>
+
+    <div class="d-flex justify-content-center">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {{#each page_items}}
+                <li class="page-item {{#if isActive}} active {{/if}}"><a class="page-link" href="/tag/{{../tag.id}}?page={{value}}">{{value}}</a></li>
+            {{/each}}
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </div>    
+
+{{/if}}   
