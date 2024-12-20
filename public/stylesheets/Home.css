@@ -1,0 +1,328 @@
+/* Base styles (apply to all screen sizes) */
+.logo {
+    color: #E82A00;
+    font-size: 32px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 600;
+    word-wrap: break-word;
+}
+
+.logo:hover {
+    color: #E82A00;
+}
+
+.logo-icon {
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border: 3px #E82A00 solid;
+    text-align: center;
+}
+.dropdown-menu {
+    z-index: 1040;
+}
+
+.nav-link {
+    color: black;
+    font-size: 18px;
+    font-family: Inter, sans-serif;
+    font-weight: 700;
+    text-transform: capitalize;
+    line-height: 1.1; /* Relative for better scaling */
+    word-wrap: break-word;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+    color: #E82A00;
+}
+
+.nav-link.dropdown-toggle[aria-expanded="true"] {
+    color: #E82A00;
+    text-decoration: underline;
+}
+
+.nav-link:focus,
+.nav-link:active {
+    color: #E82A00;
+    text-decoration: underline;
+}
+
+.nav-link:not([aria-expanded="true"]):not(:hover) {
+    color: black;
+    text-decoration: none;
+}
+
+.nav-color {
+    background-color: white;
+}
+
+.search-bar {
+    min-width: 600px;
+    margin: auto;
+}
+
+.search-bar .input-group {
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar .form-control {
+    border: none;
+    padding-left: 20px;
+}
+
+.search-bar .btn {
+    border: none;
+    padding: 10px 20px;
+}
+
+.top-left-caption {
+    top: 50px;
+    left: 120px;
+    text-align: left;
+    position: absolute;
+    color: white;
+    font-size: 40px;
+    font-family: 'PT Serif', serif;
+    font-weight: 700;
+    text-transform: capitalize;
+    line-height: 44px;
+    text-shadow: 0 0 2px black;
+}
+
+.carousel-inner .nav-link {
+    color: white !important;
+    font-family: serif;
+    padding-left: 0px;
+}
+
+.carousel-inner .nav-link:hover {
+    color: #E82A00 !important;
+    text-decoration: underline;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.carousel-control-prev {
+    left: 10px;
+}
+
+.carousel-control-next {
+    right: 10px;
+}
+
+.news-carousel-container {
+    position: relative;
+    width: 100%; /* Full container width */
+    overflow: hidden; /* Hide overflowing items */
+}
+.news-carousel {
+    width: 80%; /* Centers the carousel and adjusts its width */
+    margin: auto; /* Centers the carousel horizontally */
+    overflow: hidden; /* Ensures only visible items are shown */
+    display: flex; /* Allows flexible alignment */
+}
+
+.news-track {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+    width: calc(100% * 6); /* Buffer space for cloned items */
+}
+
+.news-item {
+    flex: 0 0 25%; /* 4 items = 25% each */
+    padding: 10px;
+    height: fit-content;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.news-item:hover {
+    transform: scale(1.05);
+}
+
+.btn-prev,
+.btn-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    color: white; /* White text/icon for visibility */
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10; /* Ensure buttons are on top of other elements */
+    transition: background-color 0.2s ease;
+}
+
+.btn-prev:hover,
+.btn-next:hover {
+    background-color: rgba(0, 0, 0, 0.7); /* Darker on hover */
+}
+
+.btn-prev {
+    left: 10px; /* Position the previous button */
+}
+
+.btn-next {
+    right: 10px; /* Position the next button */
+}
+
+#popular {
+    padding-right: 20px;
+}
+
+#sub-nav {
+    border-bottom: 1px solid black;
+    width: fit-content;
+}
+
+.margin-post {
+    margin-left: 200px;
+    margin-right: 200px;
+}
+
+.card-img-top {
+    width: 100%; /* Đảm bảo hình ảnh chiếm toàn bộ chiều rộng */
+    height: 200px; /* Đặt chiều cao cố định */
+    object-fit: cover; /* Giữ tỉ lệ ảnh và cắt nếu cần */
+    border-radius: 0; /* Xóa bo tròn nếu cần */
+}
+
+.sticky-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1030; /* Ensures it stays above other elements */
+    background-color: #f8f9fa; /* Optional: Keeps background color consistent */
+    opacity: 0.7;
+    transition: opacity 0.3s ease, transform 0.3s ease; 
+}
+.sticky-navbar:hover {
+    opacity: 1;
+    transform: scale(1.02); 
+}
+
+.news-container {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.news-item {
+    flex: 1;
+    min-width: 24%;
+    margin: 0 10px;
+    transition: transform 0.5s ease;
+}
+.footer {
+    width: 100%;
+    margin-top: 30px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+/* Responsive styles (mobile-first approach) */
+@media (max-width: 1300px) {
+    .search-bar {
+        min-width: 500px;
+    }
+
+    .margin-post {
+        margin-left: 100px;
+        margin-right: 100px;
+    }
+}
+
+@media (max-width: 1112px) {
+    .logo {
+        font-size: 28px;
+        width: 150px;
+    }
+
+    .search-bar {
+        min-width: 400px;
+    }
+
+    .top-left-caption {
+        font-size: 30px;
+        left: 50px;
+    }
+
+    .margin-post {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-bar {
+        min-width: 300px;
+    }
+
+    .logo-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .top-left-caption {
+        font-size: 24px;
+        top: 20px;
+        left: 20px;
+    }
+
+    .margin-post {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 30px;
+        height: 30px;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .search-bar {
+        min-width: auto;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .top-left-caption {
+        font-size: 18px;
+        left: 10px;
+        top: 10px;
+    }
+
+    .logo {
+        font-size: 24px;
+        width: auto;
+    }
+
+    .nav-link {
+        font-size: 16px;
+    }
+
+    .margin-post {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+}

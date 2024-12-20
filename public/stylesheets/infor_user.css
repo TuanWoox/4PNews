@@ -1,0 +1,32 @@
+.logo {
+  color: #e82a00;
+  font-size: 32px;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 600;
+  word-wrap: break-word;
+}
+
+.logo:hover {
+  color: #e82a00;
+}
+
+.logo-icon {
+  width: 50px;
+  height: 50px;
+  background: #f5f5f5;
+  border: 3px #e82a00 solid;
+  text-align: center;
+}
+.avatar_img {
+  width: 50px; /* Keeps the size of the avatar */
+  height: 50px; /* Keeps the size of the avatar */
+  border-radius: 50%; /* Makes the image circular */
+  overflow: hidden; /* Ensures no overflow outside the rounded border */
+}
+
+.avatar_img_infor {
+    border: 3px solid red; /* Reduces border size to make it tighter */
+    border-radius: 50%; /* Keeps the circular shape */
+    object-fit: cover; /* Ensures the image covers the entire area */
+    padding: 2px; /* Optional: reduces padding to make it tighter */
+}
