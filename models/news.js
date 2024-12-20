@@ -86,5 +86,6 @@ newSchema.post('findOneAndDelete', async function (deletedNews) {
     }
 });
 
+newSchema.index({ title: 'text', brief: 'text', content: 'text' });
 
 module.exports =  mongoose.model('News',newSchema);

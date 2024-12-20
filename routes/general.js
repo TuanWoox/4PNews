@@ -8,6 +8,8 @@ router.route('/tag/:tagId')
 .get(generalController.renderFindByTag);
 router.route('/category/:subCateId')
 .get(generalController.renderFindBySubCate);
+router.route('/search')
+.get(generalController.searchNews);
 router.route('/')
 .get(generalController.renderHome);
 
