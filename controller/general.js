@@ -5,6 +5,7 @@ const { cloudinary } = require('../cloudinary/postCloud');
 const cheerio = require('cheerio');
 const MainCate = require('../models/mainCategory');
 const SubCate = require('../models/subCategory');
+const mongoose = require('mongoose'); 
 
 module.exports.renderHome = async (req, res) => {
     const role = req.user ? req.user.role : "";
@@ -119,11 +120,24 @@ module.exports.renderDetailsNews = async (req,res) => {
         .populate('category', '_id name')
         .populate('tags', '_id name');
 
+    const relevantNews = await News.find({
+        _id: { $ne: news._id }, // Exclude the current news
+        $or: [
+            { category: news.category._id }, // Match the same category
+        ]
+    })
+        .limit(5) // Limit to 5 results
+        .sort({ createdAt: -1 }) // Sort by the most recently created
+        .select('title thumbnail brief views createdAt') // Select fields to display
+        .populate('category', '_id name') // Populate category for relevant news
+        .populate('tags', '_id name'); // Populate tags for relevant news
+    
     if (!news) {
         return res.status(404).send('News not found');
     }
     res.render('general/detail', {
-        news
+        news,
+        relevantNews
     });    
 }
 
@@ -229,3 +243,98 @@ module.exports.renderFindBySubCate = async (req,res) => {
         listNews
     });
 }
+
+
+module.exports.searchNews = async (req, res) => { 
+    const query = req.query.q?.trim() || '';
+    const cate = req.query.category || ''; // Category name
+    const time = req.query.time || '';
+    const sort = req.query.sort || ''; 
+    // Build filter object
+    const filterConditions = [{ $text: { $search: query } }];
+    
+    if (cate) {
+        const category = await MainCate.findOne({ name: cate }).lean(); // Find category by name
+        const mainCategory = await MainCate.findOne({ name: cate }).lean();
+    
+        if (mainCategory) {
+            // If a MainCategory is found, retrieve all related SubCategories
+            const subCategories = await SubCate.find({ belongTo: mainCategory._id }).lean();
+            const subCategoryIds = subCategories.map(subCate => subCate._id);
+            console.log(subCategoryIds);
+            // Add filter to include News items that belong to these SubCategories
+            filterConditions.push({ category: { $in: subCategoryIds } });
+        }
+    }
+    
+    // Add time filter if specified
+    if (time) {
+        const now = new Date();
+        let startDate;
+    
+        if (time === '1') startDate = new Date(now.setDate(now.getDate() - 1));
+        else if (time === '2') startDate = new Date(now.setDate(now.getDate() - 7));
+        else if (time === '3') startDate = new Date(now.setMonth(now.getMonth() - 1));
+        else if (time === '4') startDate = new Date(now.setFullYear(now.getFullYear() - 1));
+    
+        if (startDate) {
+            filterConditions.push({ "publish.publishedDate": { $gte: startDate } }); // Add time filter
+        }
+    }
+    
+    let sortCondition = { score: { $meta: 'textScore' } }; // Default to text score
+    if (sort === 'newest') {
+        sortCondition = { "publish.publishedDate": -1 }; // Newest first
+    } else if (sort === 'popular') {
+        sortCondition = { views: -1 }; // Most popular (based on a hypothetical `views` field)
+    }
+
+    const limit = 5;
+    const page = +req.query.page || 1;
+    const offset = (page - 1) * limit;
+
+    // Count the total number of news articles for the given tag
+    const nRows = await News.countDocuments({ $and: filterConditions });
+
+    const nPages = Math.ceil(nRows / limit);
+    const page_items = [];
+    for (let i = 1; i <= nPages; i++) {
+        const item = {
+            value: i,
+            isActive: i === page
+        };
+        page_items.push(item);
+    }
+
+    try {
+        const results = await News.find(
+            { $and: filterConditions },
+            { score: { $meta: 'textScore' } } // Include text relevance score
+        )
+            .sort(sortCondition) // Sort by relevance
+            .skip(offset) 
+            .limit(limit) 
+            .populate('category', '_id name')
+            .populate('tags', 'name') // Populate tags if needed
+            .exec();
+
+        // Get all categories for rendering
+        const categories = await MainCate.find({});
+        const categories_items = categories.map((cat) => ({
+            mainCate: cat,
+            isActive: cate === cat.name
+        }));
+    
+        // Render the search results page
+        res.render('general/search', {
+            results,
+            query,
+            categories_items,
+            time,
+            page_items
+        });
+    } catch (error) {
+        console.error('Error performing search:', error);
+        res.status(500).send('An error occurred while searching. Please try again later.');
+    }    
+};
