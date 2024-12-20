@@ -1,0 +1,41 @@
+/* Base styles (apply to all screen sizes) */
+.logo {
+    color: #E82A00;
+    font-size: 32px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 600;
+    word-wrap: break-word;
+}
+
+.logo:hover {
+    color: #E82A00;
+}
+
+.logo-icon {
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border: 3px #E82A00 solid;
+    text-align: center;
+}
+
+.body {
+    width: 80%;
+}
+
+.sub-body {
+    width: 50%;
+}
+
+.title {
+    color: black;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.footer {
+    width: 100%;
+    margin-top: 30px;
+    margin-left: 0px;
+    margin-right: 0px;
+}

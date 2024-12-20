@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- bootstrap html/css -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <!-- css -->
+  <link rel="icon" href="/images/icon.png">
+  <link rel="stylesheet" href="/stylesheets/infor_user.css" />
+  <link rel="stylesheet" href="/stylesheets/home.css">
+  {{#if (eq currentUser.role "admin")}}
+  <link rel="stylesheet" href="/stylesheets/admin/Admin.css" />
+  {{/if}}
+  {{{_sections.css}}}
+  <title>{{title}}</title>
+</head>
+
+<body>
+  {{#if success}}
+  <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" style="width: 50%; margin: 0 auto;">
+    {{success}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {{/if}}
+
+  {{#if error}}
+  <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" style="width: 50%; margin: 0 auto;">
+    {{error}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {{/if}}
+  <!-- header -->
+  <header>
+    <nav
+      class="navbar navbar-expand-lg nav-color border-bottom border-3 d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center mx-2">
+        <a class="navbar-brand d-flex align-items-center logo" href="/">
+          <div class="d-inline-block me-2 logo-icon" id="logoLink">4P</div>
+          {{#if (eq currentUser.role "editor")}}
+          EDITOR
+          {{/if}}
+          {{#if (eq currentUser.role "admin")}}
+          ADMIN
+          {{/if}}
+          {{#if (eq currentUser.role "writer")}}
+          WRITER
+          {{/if}}
+          {{#if (eq currentUser.role "user")}}
+          WRITER
+          {{/if}}
+        </a>
+      </div>
+      <div class="nav-link dropdown ms-auto">
+        <a href="#" class="dropdown-toggle nav-link" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Xin chào, {{currentUser.fullName}}
+          <img {{#if currentUser.profilePic.url}} src="{{currentUser.profilePic.url}}" {{else}} src="/images/user.png"
+            {{/if}} alt="avatar" class="avatar_img"
+            style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 3px solid #007bff; margin-left: 10px;" />
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-3" aria-labelledby="userDropdown">
+
+          <!-- User Role-specific Links -->
+          {{#if (eq currentUser.role "user")}}
+          <li><a class="dropdown-item" href="/user/{{currentUser._id}}/profile"><i class="bi bi-person"></i>
+              Hồ sơ cá nhân</a></li>
+          {{/if}}
+
+          {{#if (eq currentUser.role "writer")}}
+          <li><a class="dropdown-item" href="/writer/{{currentUser._id}}/profile"><i class="bi bi-person"></i>
+              Hồ sơ cá nhân</a></li>
+          <li><a class="dropdown-item" href="/writer/{{currentUser._id}}/writerNews"><i class="bi bi-briefcase"></i>
+              Không gian làm việc</a></li>
+          {{/if}}
+
+          {{#if (eq currentUser.role "editor")}}
+          <li><a class="dropdown-item" href="/editor/{{currentUser._id}}/profile"><i class="bi bi-person"></i>
+              Hồ sơ cá nhân</a></li>
+          <li><a class="dropdown-item" href="/editor/{{currentUser._id}}/editorNews"><i class="bi bi-briefcase"></i>
+              Không gian làm việc</a></li>
+          {{/if}}
+
+          {{#if (eq currentUser.role "admin")}}
+          <li><a class="dropdown-item" href="/admin/{{currentUser._id}}/profile"><i class="bi bi-person"></i>
+              Hồ sơ cá nhân</a></li>
+          <li><a class="dropdown-item" href="/admin/{{currentUser._id}}/"><i class="bi bi-gear"></i> Không
+              gian làm việc</a></li>
+          {{/if}}
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" href="/account/logOut"><i class="bi bi-box-arrow-right"></i> Đăng
+              xuất</a></li>
+        </ul>
+      </div>
+
+    </nav>
+    {{#if (eq currentUser.role "admin")}}
+    <ul class="nav justify-content-center shadow p-3 mb-5 bg-body rounded nav-color">
+      <div class="d-flex justify-content-between body">
+        <li class="nav-item">
+          <a class="nav-link {{#if (eq activePage "category")}}active{{/if}}" aria-current="page" href="/admin/mainCategories">Chuyên mục</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{#if (eq activePage "tag")}}active{{/if}}" aria-current="page" href="/admin/tags">Tag</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{#if (eq activePage "news")}}active{{/if}}" aria-current="page" href="/admin/news">Bài viết</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{#if (eq activePage "users")}}active{{/if}}" aria-current="page" href="/admin/users">Người
+            dùng</a>
+        </li>
+      </div>
+    </ul>
+    {{/if}}
+
+  </header>
+  {{{body}}}
+  <div class="footer">
+    <footer>
+      <div class="d-flex justify-content-center mb-3 mt-3 border-top border-3">
+        <a class="navbar-brand d-flex align-items-center logo mt-2" href="/">
+          <div class="d-inline-block me-2 logo-icon">4P</div>
+          NEWS
+        </a>
+      </div>
+      <p class="text-center text-muted mt-2">© 2024 4P NEWS</p>
+    </footer>
+  </div>
+
+  <!-- bootstrap script -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+    integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+    crossorigin="anonymous"></script>
+  <script>
+    const logoElement = document.querySelector('#logoLink');
+    logoElement.addEventListener('click', function (event) {
+      window.location.href = '/';
+    });
+  </script>
+  {{{_sections.js}}}
+</body>
+
+</html>

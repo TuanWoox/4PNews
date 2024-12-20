@@ -1,0 +1,75 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/stylesheets/SignIn.css"> 
+{{/section}}
+    
+
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="left-body"></div>
+
+        <div class="body">
+            <div class="d-flex justify-content-center mb-3 mt-3">
+                <a class="navbar-brand d-flex align-items-center logo" href="#">
+                    <div class="d-inline-block me-2 logo-icon">4P</div>
+                    NEWS
+                </a>
+            </div>
+            <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+                <form action="/account/signIn" method="post">
+                    <div class="text-center mb-3">
+                        <p class="title">Đăng nhập với:</p>
+
+                        <button type="button" data-mdb-button-init data-mdb-ripple-init
+                            class="btn btn-link btn-floating mx-1">
+                            <a href="/account/signIn/googleAuth"><i class="bi bi-google"></i></a>
+                        </button>
+
+                        <button type="button" data-mdb-button-init data-mdb-ripple-init
+                            class="btn btn-link btn-floating mx-1">
+                            <a href="/account/signIn/githubAuth"><i class="bi bi-github"></i></a>
+                        </button>
+                    </div>
+
+                    <p class="text-center title">Hoặc:</p>
+
+                    <div class="d-flex justify-content-center mb-3">
+                        <div class="sub-body">
+                            <!-- Email input -->
+                            <div class="form-floating mb-3">
+                                <input type="name" class="form-control" id="floatingInput"
+                                    placeholder="" name="username">
+                                <label for="floatingInput">Tài khoản</label>
+                            </div>
+
+                            <!-- Password input -->
+                            <div class="form-floating">
+                                <input type="password" class="form-control" id="floatingPassword"
+                                    placeholder="Password" name="password">
+                                <label for="floatingPassword">Mật khẩu</label>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-3">
+                                <!-- Checkbox -->
+                                <div class="form-check mb-3 mb-md-0">
+                                    <input class="form-check-input" type="checkbox" value="" id="loginCheck" checked />
+                                    <label class="form-check-label" for="loginCheck"> Ghi nhớ cho lần đăng nhập sau </label>
+                                </div>
+                                <a href="#!">Quên mất khẩu</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mb-3">
+                        <button class="btn btn-primary sub-body" type="submit">Đăng nhập</button>
+                    </div>
+
+                    <div class="text-center">
+                        <p>Chưa có tài khoản? <a href="/account/signUp">Đăng ký ngay</a></p>
+                    </div>
+                    <div class="text-center">
+                        <p>Bạn đã quên mật khẩu? <a href="/account/forgetPassword">Quên mật khẩu</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="right-body"></div>
+    </div>
