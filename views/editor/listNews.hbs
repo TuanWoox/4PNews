@@ -1,0 +1,114 @@
+{{#section 'css'}}
+<link rel="stylesheet" href="/stylesheets/editor/article_list_editor.css">
+{{/section}}
+<!-- body -->
+<div class="container my-5">
+    <div class="row my-5 border-bottom border-2 border-dark">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">{{managedMainCategory.name}}</a>
+            </li>
+    </div>
+    <div class="btn-group d-flex justify-content-end mb-3" role="group" aria-label="First group">
+        {{#each page_items}}
+        {{#if isActive}}
+        <a type="button" class="btn btn-outline-primary active">{{value}}</a>
+        {{else}}
+        <a type="button" class="btn btn-outline-primary"
+            href="/editor/{{../currentUser._id}}/editorNews?status={{value}}">{{value}}</a>
+        {{/if}}
+        {{/each}}
+    </div>
+    {{#if isEmpty}}
+    <div class="text-center py-3">
+        <img src="/images/empty-state-image1.png" alt="No items found" class="img-fluid mb-3" style="max-width: 300px;">
+        <h4>No News Available</h4>
+        <p class="text-muted">It seems there are no news articles to display. Check back later!</p>
+    </div>
+    {{else}}
+
+    {{#each listNews}}
+    <div>
+        <div class="mb-3 border-bottom border-3 border-dark">
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-2">
+                        <!-- Make the thumbnail clickable -->
+                        <a href="/editor/{{../currentUser._id}}/editorNews/{{this._id}}">
+                            <img src="{{this.thumbnail}}" class="img-fluid rounded-start img1" alt="Thumbnail Image" />
+                        </a>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <p class="date">{{convertToDisplayDate this}}</p>
+                            <!-- Make the title clickable -->
+                            <a href="/editor/{{../currentUser._id}}/editorNews/{{this._id}}"
+                                class="text-decoration-none">
+                                <h3 class="card-title">{{this.title}}</h3>
+                            </a>
+                            <p class="card-text">{{this.brief}}</p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    Last updated {{timesince this.updatedAt}}
+                                </small>
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    By: <a href="#" class="author">{{this.author.penName}}</a>
+                                </small>
+                            </p>
+
+                            <div class="tag_name">
+                                {{#each tags}}
+                                <a href="#" class="badge bg-secondary" style="text-decoration: none;">{{name}}</a>
+                                {{/each}}
+                            </div>
+
+                            <!-- Add News Status Here -->
+                            <p class="card-text text-end mt-4">
+                                <span class="badge 
+                                          {{#if (eq this.status 'draft')}} bg-secondary
+                                          {{else if (eq this.status 'approved')}} bg-success
+                                          {{else if (eq this.status 'published')}} bg-primary
+                                          {{else if (eq this.status 'rejected')}} bg-danger
+                                          {{else}} bg-warning
+                                          {{/if}} py-2 px-3 fs-6">
+                                    {{this.status}}
+                                </span>
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+    <div class="btn_change_page d-flex justify-content-center align-items-center">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <!-- Previous Button -->
+          <li class="page-item {{#if (eq currentPage 1)}}disabled{{/if}}">
+            <a class="page-link" href="?status={{status}}&page={{subtract currentPage 1}}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+
+          <!-- Page Numbers -->
+          {{#each (range 1 totalPages)}}
+          <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+            <a class="page-link" href="?status={{../status}}&page={{this}}">{{this}}</a>
+          </li>
+          {{/each}}
+
+          <!-- Next Button -->
+          <li class="page-item {{#if (eq currentPage totalPages)}}disabled{{/if}}">
+            <a class="page-link" href="?status={{status}}&page={{add currentPage 1}}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    {{/if}}

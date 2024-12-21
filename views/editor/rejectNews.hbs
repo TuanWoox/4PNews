@@ -1,0 +1,89 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/stylesheets/editor/rejected_editor.css">
+{{/section}}    
+
+    <!-- body -->
+    <div class="mx-5">
+      <div class="row my-5 border-bottom border-2 border-dark">
+        <div class="col-9">
+          <h5>TỪ CHỐI BÀI VIẾT</h5>
+        </div>
+      </div>
+      <!-- card -->
+      <div class="mb-3 border-bottom border-3 border-dark">
+        <div class="card mb-3">
+          <div class="row g-0 d-flex justify-content-center">
+            <div class="col-md-10">
+              <div class="card-body">
+                <p class="date">{{convertToDisplayDate news}}</p>
+                <h3 class="card-title">
+                  {{news.title}}
+                </h3>
+                <p class="card-text">
+                  {{{news.content}}}
+                </p>
+                <p class="card-text">
+                  <small class="text-muted">Last updated {{timesince news.updatedAt}}</small>
+                </p>
+                <p class="card-text">
+                  <small class="text-muted"
+                    >By: <a href="#" class="author">{{news.author.penName}}</a></small
+                  >
+                </p>
+                <div class="tag_name">
+                  
+                  {{#each news.tags}}
+                      <a href="#" class="badge bg-secondary" style="text-decoration: none;">{{name}}</a>
+                  {{/each}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form method="post" >
+        <!-- edit -->
+        <div class="border-bottom border-3 border-dark">
+          <div class="mb-3">
+            <label for="content" class="form-label"><h5>Ghi chú</h5></label>
+            <textarea 
+              name="reason"
+              class="form-control content border-3"
+              id="content"
+              placeholder="Ghi chú"
+              style="height: 200px"
+            ></textarea>
+          </div>
+        </div>
+        <!-- button -->
+        <div class="control d-flex justify-content-end my-2">
+          <a href="/editor/{{currentUser.id}}/editorNews/{{news.id}}" type="button" class="btn btn-info min-width mx-2">
+            Quay lại
+          </a>
+          <button type="submit" class="btn btn-success btn-send min-width mx-2">
+            Gửi
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Overlay-->
+    <div id="overlay" class="overlay">
+      <div class="overlay-content">
+        <!-- <span id="close-overlay" class="close-btn">&times;</span> -->
+        <div
+          class="navbar-brand d-flex align-items-center justify-content-center logo"
+        >
+          <div class="d-inline-block me-2 logo-icon">4P</div>
+          NEWS
+        </div>
+        <i class="bi bi-check-circle text-success"></i>
+        <h3 class="text-success">
+          Đã gửi lại bài viết cho
+          <p>TuanWoox</p>
+        </h3>
+        <button type="button" id="close-overlay" class="btn btn-success mx-2">
+          Xác nhận
+        </button>
+      </div>
+    </div>
