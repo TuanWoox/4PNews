@@ -1,0 +1,27 @@
+.logo {
+    color: #E82A00;
+    font-size: 32px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 600;
+    word-wrap: break-word;
+}
+
+.logo:hover {
+    color: #E82A00;
+}
+
+.logo-icon {
+    width: 50px;
+    height: 50px;
+    background: #F5F5F5;
+    border: 3px #E82A00 solid;
+    text-align: center;
+}
+.avatar_img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.avatar_img_infor{
+    border-radius: 50%;
+}

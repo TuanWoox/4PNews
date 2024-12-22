@@ -1,0 +1,63 @@
+<!-- Header -->
+<div class="row my-5 border-bottom border-2 border-dark">
+    <div class="col-9 ms-2">
+        <h5 class="text-danger">BÀI VIẾT BỊ TỪ CHỐI</h5>
+    </div>
+</div>
+<div class="container-fluid p-4">
+    
+    <!-- Card Section -->
+    <div class="mb-3 border-bottom border-3 border-dark">
+        <div class="card mb-3">
+            <div class="row g-0">
+                <!-- Thumbnail -->
+                <div class="col-md-2">
+                    <img src="{{rejectedNews.thumbnail}}" class="img-fluid rounded-start" alt="Thumbnail">
+                </div>
+
+                <!-- Content -->
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <a href="#" class="status text-danger">Đã bị từ chối</a>
+                        <h5 class="card-title">{{rejectedNews.title}}</h5>
+                        <p class="card-text">{{rejectedNews.brief}}</p>
+                        <p class="card-text">
+                            <small class="text-muted">Đăng vào {{convertToDisplayDate rejectedNews}}</small>
+                        </p>
+
+                        <!-- Tags -->
+                        <div class="tag_name">
+                            {{#each rejectedNews.tags}}
+                                <a href="#" class="badge bg-secondary text-decoration-none">{{name}}</a>
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Section -->
+    <form>
+        <!-- Notes Section -->
+        <div class="">
+            <div class="mb-3">
+                <label for="content" class="form-label">
+                    <h5>Ghi chú từ biên tập viên {{rejectedNews.reject.whoRejected.fullName}}</h5>
+                </label>
+                <textarea id="content" class="form-control" rows="4" readonly>{{rejectedNews.reject.reason}}</textarea>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="control d-flex justify-content-end my-2">            
+            <form action="/writer/{{rejectedNews.author}}/viewNews/{{rejectedNews._id}}?_method=DELETE" method="POST" class="my-3 ms-1">
+                <a href="/writer/{{rejectedNews.author}}/writerNews" class="btn btn-outline-info mx-2">Quay lại</a>
+                <button type="submit" class="btn btn-danger mx-2">
+                    Xóa
+                </button>
+                <a href="/writer/{{rejectedNews.author}}/editNews/{{rejectedNews._id}}" class="btn btn-info min-width mx-2">Chỉnh sửa</a>
+            </form>
+        </div>
+    </form>
+</div>

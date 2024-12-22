@@ -1,0 +1,81 @@
+<!-- body -->
+<div class="row my-5">
+    <div class="col-1"></div>
+    <!-- avatar -->
+    <div class="col-4">
+        <div id="avatar" class=" border-bottom border-3 border-muted ">
+            <img {{#if writer.profilePic.url}} src="{{writer.profilePic.url}}" {{else}} src="/images/user.png" {{/if}}
+                alt="avatar" class="rounded-circle mb-3" id="avatarDisplay"
+                style="width: 200px; height: 200px; object-fit: cover; border: 5px solid red" />
+            <label for="" class="fs-2 my-3">
+                {{writer.username}}
+                <br>
+                <span class="badge bg-info text-dark my-3">4P WRITER</span>
+            </label>
+
+        </div>
+        {{#if currentUser}}
+        {{#if (eq currentUser._id writer._id)}}
+        <div class="d-grid gap-3 my-5">
+            <a href="/account/changePassword" class="btn btn-outline-primary">
+                Đổi mật khẩu
+            </a>
+            <a href="/account/logOut" class="btn btn-outline-danger">
+                Đăng xuất
+            </a>
+        </div>
+        {{/if}}
+        {{/if}}
+    </div>
+    <!-- thông tin -->
+    <div class="col-7 border-start border-3 border-muted">
+        <h5>
+            THÔNG TIN CÁ NHÂN
+            {{#if currentUser}}
+            {{#if (eq currentUser._id writer._id)}}
+            <a href="/writer/{{writer._id}}/editProfile"><i class="bi bi-pencil-square text-primary mx-2"></i></a>
+            {{/if}}
+            {{/if}}
+        </h5>
+        <div class="mb-3">
+            <label for="userName" class="form-label mx-3">Họ và tên</label>
+            <input type="text" class="form-control w-75" id="userName" value="{{writer.fullName}}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="Email" class="form-label mx-3">Email</label>
+            <input type="text" class="form-control w-75" id="Email" value="{{writer.email}}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="birthdate" class="form-label mx-3">Ngày sinh</label>
+            <input type="text" class="form-control w-75" id="birthdate" value="{{formattedDateOfBirth}}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="gender" class="form-label mx-3">Giới tính</label>
+            <input type="text" class="form-control w-75" id="gender"
+                value="{{#if (eq writer.gender 'male')}}Nam{{else if (eq writer.gender 'female')}}Nữ{{else}}''{{/if}}"
+                readonly>
+        </div>
+        <div class="mb-3">
+            <label for="address" class="form-label mx-3">Địa chỉ</label>
+            <input type="text" class="form-control w-75" id="address" value="{{writer.address}}"
+                placeholder="Chưa có địa chỉ" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="address" class="form-label mx-3">Số điện thoại</label>
+            <input type="text" class="form-control w-75" id="address" value="{{writer.phoneNumber}}"
+                placeholder="Chưa có điện thoại" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="penName" class="form-label mx-3">Bút danh</label>
+            <input type="text" class="form-control w-75" id="penName" value="{{writer.penName}}"
+                placeholder="{{writer.fullName}}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="bio" class="form-label mx-3">Tiểu sử</label>
+            <textarea class="form-control w-75" id="txtBio" rows="5" placeholder="Nhập tiểu sử của tác giả tại đây"
+                name="writer[bio]" readonly>{{writer.bio}}</textarea>
+        </div>
+
+    </div>
+
+</div>

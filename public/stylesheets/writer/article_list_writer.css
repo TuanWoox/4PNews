@@ -1,0 +1,71 @@
+.logo {
+  color: #e82a00;
+  font-size: 32px;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 600;
+  word-wrap: break-word;
+}
+
+.logo:hover {
+  color: #e82a00;
+}
+
+.logo-icon {
+  width: 50px;
+  height: 50px;
+  background: #f5f5f5;
+  border: 3px #e82a00 solid;
+  text-align: center;
+}
+.avatar_img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.img1 {
+  width: 100%;
+  height: 100%;
+}
+.status {
+  display: block;
+  text-align: right;
+  margin-bottom: 10px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #4c91d1;
+}
+.btn {
+  min-width: 100px;
+}
+.control {
+  display: block;
+  text-align: right;
+  margin-bottom: 10px;
+}
+.tag_name {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.tag_item {
+  text-decoration: none;
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 5px;
+  color: #000;
+  font-size: 15px;
+  width: 70px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.add_icon {
+  width: 50px;
+  height: 50px;
+}

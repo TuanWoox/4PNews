@@ -1,0 +1,212 @@
+{{#section 'css'}}
+<link rel="stylesheet" href="/stylesheets/editor/approve_article.css">
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.4.0/dist/tagify.css">
+
+{{/section}}
+<!-- body -->
+<div class="mx-5">
+  <div class="row my-5 border-bottom border-2 border-dark">
+    <div class="col-9">
+      <h5>DUYỆT BÀI VIẾT</h5>
+    </div>
+  </div>
+  <!-- card -->
+  <div class="mb-3 border-bottom border-3 border-dark">
+    <div class="card mb-3">
+      <div class="row g-0 d-flex justify-content-center">
+        <div class="col-md-10">
+          <div class="card-body">
+            <p class="date">{{convertToDisplayDate news}}</p>
+            <h1 class="card-title">
+              {{news.title}}
+            </h1>
+            <p class="card-text">
+              {{{news.content}}}
+            </p>
+            <p class="card-text">
+              <small class="text-muted">Last updated {{timesince news.updatedAt}}</small>
+            </p>
+            <p class="card-text">
+              <small class="text-muted">By: <a href="#" class="author">{{news.author.penName}}</a></small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- tag -->
+  <form action="?_method=PATCH" method="post" id="approvedForm">
+    <div class="row-5 my-5 border-bottom border-2 border-dark">
+      <!-- Thời điểm xuất bản -->
+      <div class="d-flex align-items-center justify-content-between my-3">
+        <label for="datetime" class="form-label me-3">
+          <h5>Thời điểm xuất bản</h5>
+        </label>
+        <input type="text" id="txtDatePub" name="datetime">
+      </div>
+
+      <!-- Dropdown (Chuyên mục) -->
+      <div class="d-flex align-items-center justify-content-between my-3">
+        <label>
+          <h5>Chuyên mục chính</h5>
+        </label>
+        <div class="d-flex">
+          <select class="form-select" id="subCategory" required name="">
+            {{#each allMainCate}}
+            <option value="{{id}}" {{#if (eq id ../news.category.belongTo)}} selected {{/if}}>{{name}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+      <!-- Dropdown (Chuyên mục) -->
+      <div class="d-flex align-items-center justify-content-between my-3">
+        <label>
+          <h5>Chuyên mục phụ</h5>
+        </label>
+        <div class="d-flex">
+          <select class="form-select" id="subCategory" required name="news[category]">
+            {{#each subOfMainCate}}
+            <option value="{{id}}" {{#if (eq id ../news.category._id)}} selected {{/if}}>{{name}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+
+      <!-- Nhãn -->
+      <div class="d-flex align-items-center justify-content-between my-3">
+        <label>
+          <h5>Tags (cách nhau bằng dấu tab)</h5>
+        </label>
+        <div class="mb-3">
+          <input type="text" class="form-control" id="tags" name="news[tags]"  value='{{tagsJson}}' >
+        </div>
+
+      </div>
+
+
+      <!-- button -->
+      <div class="row-1 control d-flex justify-content-end mb-3">
+        <a href="/editor/{{currentUser.id}}/editorNews/{{news.id}}" type="button" class="btn btn-info min-width mx-2">
+          Quay lại
+        </a>
+        <button type="submit" class="btn btn-success btn-approve min-width mx-2">
+          Duyệt bài
+        </button>
+      </div>
+    </div>
+  </form>
+
+</div>
+<!-- Overlay-->
+<div id="overlay" class="overlay">
+  <div class="overlay-content">
+    <!-- <span id="close-overlay" class="close-btn">&times;</span> -->
+    <div class="navbar-brand d-flex align-items-center justify-content-center logo">
+      <div class="d-inline-block me-2 logo-icon">4P</div>
+      NEWS
+    </div>
+    <i class="bi bi-check-circle text-success"></i>
+    <h3 class="text-success">
+      Đã duyệt bài viết của
+      <p>TuanWoox</p>
+    </h3>
+    <button type="button" id="close-overlay" class="btn btn-success mx-2">
+      Xác nhận
+    </button>
+  </div>
+</div>
+{{#section 'js'}}
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.4.0/dist/tagify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  const tagInputElement = document.querySelector("#tags");
+
+  const tagify = new Tagify(tagInputElement, {
+    whitelist: [],
+    dropdown: {
+      enabled: 0,
+      closeOnSelect: true
+    }
+  });
+  tagify.on('input', onInput)
+  function onInput(e) {
+    var value = e.detail.value
+    tagify.whitelist = null // reset the whitelist
+
+    // show loading animation.
+    tagify.loading(true)
+
+    fetch('/api/suggestTagByLetter?letter=' + value)
+      .then(RES => RES.json())
+      .then(function (newWhitelist) {
+        tagify.whitelist = newWhitelist.map(tag => tag.name);
+        tagify.loading(false).dropdown.show(value) // render the suggestions dropdown
+      })
+  }  
+</script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+<script>
+  jQuery('#txtDatePub').datetimepicker({
+    timepicker: true,          // Enable time selection
+    format: 'd/m/Y H:i',       // Include both date and time
+    mask: true,                // Allows entering date/time in the correct format
+    step: 15                   // Optional: Sets minute interval (e.g., 15 minutes)
+  });
+
+</script>
+<script>
+  document.querySelector('#approvedForm').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    // Get the entered date from the input field
+    const datePub = document.querySelector('#txtDatePub').value;
+    const tagsInput = document.querySelector('#tags').value;
+    // Parse the entered date and the current date
+    const enteredDate = parseDate(datePub); // Convert to a comparable date object
+    const currentDate = new Date();
+
+    // Validation: Check if the date is empty or invalid
+    if (!datePub || isNaN(enteredDate)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Ngày không hợp lệ',
+        text: 'Vui lòng nhập ngày hợp lệ',
+      });
+      return;
+    }
+    // Validation: Check if the entered date is in the past
+    if (enteredDate <= currentDate) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Ngày không hợp lệ',
+        text: 'Ngày xuất bản phải trong tương lai',
+      });
+      return;
+    }
+    // Validation: Check if tags are empty
+    if (!tagsInput) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Thiếu Tags',
+        text: 'Vui lòng nhập ít nhất một tag',
+      });
+      return;
+    }
+    evt.target.submit();
+  });
+
+  function parseDate(dateStr) {
+    const [datePart, timePart] = dateStr.split(' '); // Split date and time
+    const [day, month, year] = datePart.split('/'); // Parse the date
+    const [hours, minutes] = timePart ? timePart.split(':') : [0, 0]; // Parse time or default to 0
+
+    return new Date(year, month - 1, day, hours, minutes);
+  }
+
+</script>
+{{/section}}
