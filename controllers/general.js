@@ -2,10 +2,9 @@ const User = require('../models/user');
 const News = require('../models/news');
 const Tag = require('../models/tag');
 const { cloudinary } = require('../cloudinary/postCloud');
-const cheerio = require('cheerio');
 const MainCate = require('../models/mainCategory');
 const SubCate = require('../models/subCategory');
-const mongoose = require('mongoose'); 
+const Comment = require('../models/comment')
 
 module.exports.renderHome = async (req, res) => {
     const role = req.user ? req.user.role : "";
@@ -103,7 +102,6 @@ module.exports.renderHome = async (req, res) => {
 };
 
 module.exports.renderDetailsNews = async (req,res) => {
-    const role = req.user ? req.user.role : "";
     const { newsId } = req.params;
 
     const news = await News.findByIdAndUpdate(
@@ -123,17 +121,36 @@ module.exports.renderDetailsNews = async (req,res) => {
     })
         .limit(5) 
         .sort({ createdAt: -1 }) 
-        .select('title thumbnail brief views createdAt') 
         .populate('category', '_id name') 
         .populate('tags', '_id name'); 
+    
+    const listComment = await Comment.find({ belongTo: newsId })
+        .populate('reader', '_id fullName profilePic')
+        .sort({ createdAt: -1 });
     
     if (!news) {
         return res.status(404).send('News not found');
     }
     res.render('general/detail', {
         news,
-        relevantNews
+        relevantNews,
+        listComment
     });    
+}
+
+module.exports.addComment = async (req, res) => {
+    const { newsId } = req.params;
+    const { comment } = req.body;
+
+    const newComment = new Comment ({
+        reader: res.locals.currentUser._id,
+        belongTo: newsId,
+        content: comment
+    })
+    console.log(newComment);
+    await newComment.save();
+
+    res.redirect(`/detail/${newsId}`);
 }
 
 module.exports.renderFindByTag = async (req, res) => {
