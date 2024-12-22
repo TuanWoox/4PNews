@@ -1,0 +1,60 @@
+.logo {
+  color: #e82a00;
+  font-size: 32px;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 600;
+  word-wrap: break-word;
+}
+
+.logo:hover {
+  color: #e82a00;
+}
+
+.logo-icon {
+  width: 50px;
+  height: 50px;
+  background: #f5f5f5;
+  border: 3px #e82a00 solid;
+  text-align: center;
+}
+.avatar_img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.tag_name {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.tag_item {
+  text-decoration: none;
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 5px;
+  color: #000;
+  font-size: 15px;
+  width: 70px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status {
+  display: block;
+  text-align: right;
+  margin-bottom: 10px;
+  text-decoration: none;
+  font-size: 20px;
+}
+.status:hover {
+  color: inherit; /* Giữ nguyên màu mặc định từ lớp `text-danger` */
+  text-decoration: none; /* Không gạch chân khi hover */
+}
+.content {
+  min-height: 15rem;
+}
+.min-width {
+  min-width: 120px;
+}

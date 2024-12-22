@@ -1,0 +1,233 @@
+{{#section 'css'}}
+<link rel="stylesheet" href="/stylesheets/writer/add_news_writer.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.4.0/dist/tagify.css">
+
+{{/section}}
+<div class="container my-5">
+  <div class="row-1 my-5 border-bottom border-2 border-dark">
+    <div class="col-9">
+      <h3>THÊM BÀI VIẾT</h3>
+    </div>
+  </div>
+  <form id="news-create-form" method="POST" action="/writer/{{currentUser._id}}/addNews">
+    <!-- Nội dung -->
+    <div class="row-5 my-5 border-bottom border-2 border-dark">
+      <div class="mb-3">
+        <label for="title" class="form-label">
+          <h5>Tiêu đề</h5>
+        </label>
+        <input type="text" class="form-control" id="title" placeholder="Ghi tiêu đề bài viết của bạn ở đây!"
+          name="news[title]" required />
+      </div>
+      <div class="mb-3">
+        <label for="summary_content" class="form-label">
+          <h5>Tóm tắt nội dung</h5>
+        </label>
+        <textarea class="form-control" id="summary_content" rows="3"
+          placeholder="Ghi tóm tắt nội dung bài viết của bạn ở đây!" name="news[brief]" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="content">
+          <h5>Nội dung</h5>
+        </label>
+        <textarea class="form-control content" name="news[content]" id="tinymce-content" rows="5"
+          placeholder="Viết nội dung của bạn..." required name="news[content]"> </textarea>
+      </div>
+      <div class="my-3">
+        <label for="premium" class="form-label">
+          <h5>Loại bài viết</h5>
+        </label>
+        <select class="form-select" id="premium" name="news[premium]" required>
+          <option value="false" selected>Thông thường</option>
+          <option value="true">Premium</option>
+        </select>
+      </div>
+      <div class="my-3">
+        <label for="premium" class="form-label">
+          <h5>Chỉ mục chính</h5>
+        </label>
+        <select class="form-select" id="mainCategory" required>
+          {{#each allMainCate}}
+          <option value="{{id}}">{{name}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="my-3">
+        <label for="premium" class="form-label">
+          <h5>Chỉ mục phụ</h5>
+        </label>
+        <select class="form-select" id="subCategory" required name="news[category]">
+          {{#each firstSubOfMainCate}}
+          <option value="{{id}}">{{name}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="title" class="form-label">
+          <h5>Tags bài viết( Viết cách nhau bằng dấu tab )</h5>
+        </label>
+        <input type="text" id="tags" name="news[tags]" class="form-control" placeholder="Nhập vào tags của bạn"
+          required>
+      </div>
+    </div>
+
+
+    <input type="hidden" name="news[images]" id="images-input">
+    <!-- button -->
+    <div class="row-1 control d-flex justify-content-end">
+      <a href="/writer/{{currentUser._id}}/writerNews" class="btn btn-danger min-width mx-2">Hủy</a>
+      <button type="submit" class="btn btn-success min-width mx-2" id="submit-button">
+        Nộp
+      </button>
+    </div>
+  </form>
+</div>
+{{#section 'js'}}
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.4.0/dist/tagify.min.js"></script>
+<script>
+  const tagInputElement = document.querySelector("#tags");
+
+  const tagify = new Tagify(tagInputElement, {
+    whitelist: [],
+    dropdown: {
+      enabled: 0,
+      closeOnSelect: true
+    }
+  });
+  tagify.on('input', onInput)
+  function onInput(e) {
+    var value = e.detail.value
+    tagify.whitelist = null // reset the whitelist
+
+    // show loading animation.
+    tagify.loading(true)
+
+    fetch('/api/suggestTagByLetter?letter=' + value)
+      .then(RES => RES.json())
+      .then(function (newWhitelist) {
+        tagify.whitelist = newWhitelist.map(tag => tag.name);
+        tagify.loading(false).dropdown.show(value) // render the suggestions dropdown
+      })
+  }
+
+</script>
+<script>
+  const mainCategory = document.querySelector('#mainCategory');
+  const subCategory = document.querySelector('#subCategory');
+  mainCategory.addEventListener('change', async (event) => {
+    const mainCategoryId = event.target.value;
+    const response = await fetch(`/api/getSubCategories/${mainCategoryId}`);
+    const subcategories = await response.json();
+    subCategory.innerHTML = '';
+    subcategories.forEach((subcategory) => {
+      console.log(subcategory);
+      const option = document.createElement('option');
+      option.value = subcategory._id;
+      option.textContent = subcategory.name;
+      subCategory.appendChild(option);
+    });
+  })
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="application/javascript" src="/tinymce/tinymce.min.js"></script>
+<script type="application/javascript">
+  let imagesToUploadBlob = []; // Array to keep images locally
+
+  tinymce.init({
+    selector: 'textarea#tinymce-content',
+    plugins: 'image link code table lists preview wordcount fullscreen emoticons',
+    toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | ' +
+      'bullist numlist outdent indent | link image | code preview fullscreen | emoticons',
+    image_title: true,
+    images_upload_handler: async function (blobInfo, progress) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const blobUrl = URL.createObjectURL(blobInfo.blob());
+          imagesToUploadBlob.push({
+            blob: blobInfo.blob(),
+            url: blobUrl,
+          });
+          resolve(blobUrl);
+        };
+        reader.onerror = () => reject({ message: 'Image upload failed' });
+        reader.readAsDataURL(blobInfo.blob());
+      });
+    },
+  });
+
+  document.querySelector('#submit-button').addEventListener('click', async (evt) => {
+    evt.preventDefault();
+    const button = document.querySelector('#submit-button');
+    button.disabled = true;
+
+    // Show SweetAlert loading popup
+    Swal.fire({
+      title: 'Đang tải lên bài viết',
+      text: 'Vui lòng chờ trong khi bài viết của bạn đang được tải lên...',
+      icon: 'info',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading(); // Show spinner
+      }
+    });
+
+    let content = tinymce.activeEditor.getContent();
+
+    try {
+      const currentImagesInContent = Array.from(tinymce.activeEditor.getDoc().querySelectorAll('img')).map(img => img.src);
+      const imagesToUpload = imagesToUploadBlob.filter(image => currentImagesInContent.includes(image.url));
+
+      // Upload all remaining images
+      const uploadResults = await Promise.all(imagesToUpload.map(image => sendImageToCloud(image.blob)));
+
+      // Replace each temporary URL with the real URL in the content
+      uploadResults.forEach((result, index) => {
+        const { url, filename } = result;
+        content = content.replace(imagesToUpload[index].url, url);
+      });
+
+      // Set updated images and content for the form submission
+      const images = uploadResults.map(({ url, filename }) => ({ url, filename }));
+      document.querySelector('#images-input').value = JSON.stringify(images);
+      tinymce.activeEditor.setContent(content);
+
+      // Add the image upload and content update action to the undo stack
+      tinymce.activeEditor.undoManager.add();
+
+      // Submit the form
+      Swal.close(); // Close the SweetAlert popup
+      document.querySelector('#news-create-form').submit();
+    } catch (error) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to upload image(s). Please try again.',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      });
+      console.error("Failed to upload image(s):", error);
+      button.disabled = false; // Re-enable the button on failure
+    }
+  });
+
+  async function sendImageToCloud(imageBlob) {
+    const url = '/api/imageHandler/upload';
+    const formData = new FormData();
+    formData.append('image', imageBlob, 'image.jpg');
+
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status}`);
+    }
+    const result = await response.json();
+    return result;
+  }
+</script>
+
+{{/section}}

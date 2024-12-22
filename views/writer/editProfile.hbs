@@ -1,0 +1,140 @@
+{{#section 'css'}}
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+{{/section}}
+<form action="/writer/{{writer._id}}/editProfile?_method=PATCH" method="POST" enctype="multipart/form-data"
+    id="editForm">
+    <!-- body -->
+    <div class="row my-5">
+        <div class="col-1"></div>
+        <!-- avatar -->
+        <div class="col-4">
+            <div id="avatar" class=" border-bottom border-3 border-muted ">
+                <img {{#if writer.profilePic.url}} src="{{writer.profilePic.url}}" {{else}} src="/images/user.png"
+                    {{/if}} alt="avatar" class="rounded-circle mb-3" id="avatarDisplay"
+                    style="width: 200px; height: 200px; object-fit: cover; border: 5px solid red" />
+                <label for="" class="fs-2 my-3">{{writer.username}}</label>
+            </div>
+            <div class="d-grid gap-3 my-5">
+                <label for="avatarInput"> Thay đổi avatar </label>
+                <!-- File input element for uploading avatar -->
+                <input type="file" class="form-control" id="avatarInput" name="avatar" onchange="previewAvatar()">
+            </div>
+            <div class="d-grid gap-3 my-5">
+                <!-- File input element for uploading avatar -->
+                <button class="btn btn-outline-primary" type="submit">Cập nhật thông tin</button>
+                <a href="/writer/{{writer._id}}/profile" class="btn btn-outline-danger">Hủy cập nhật thông tin</a>
+            </div>
+        </div>
+        <!-- thông tin -->
+        <div class="col-7 border-start border-3 border-muted">
+            <h5>
+                THÔNG TIN CÁ NHÂN
+            </h5>
+            <div class="mb-3">
+                <label for="userName" class="form-label mx-3">Họ và tên</label>
+                <input type="text" class="form-control w-75" id="userName" value="{{writer.fullName}}"
+                    name="writer[fullName]">
+            </div>
+            <div class="mb-3">
+                <label for="Email" class="form-label mx-3">Email</label>
+                <input type="text" class="form-control w-75" id="Email" value="{{writer.email}}" name="writer[email]">
+            </div>
+            <div class="mb-3">
+                <label for="txtDOB" class="form-label mx-3">Ngày sinh</label>
+                <input type="text" class="form-control w-75" id="txtDOB" value="{{formattedDateOfBirth}}"
+                    name="writer[dateOfBirth]">
+            </div>
+            <div class="mb-3">
+                <label for="gender" class="form-label mx-3">Giới tính</label>
+                <input type="text" class="form-control w-75" id="gender"
+                    value="{{#if (eq writer.gender 'male')}}Nam{{else if (eq writer.gender 'female')}}Nữ{{else}}''{{/if}}"
+                    readonly name="writer[gender]">
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label mx-3">Địa chỉ</label>
+                <input type="text" class="form-control w-75" id="address" value="{{writer.address}}"
+                    placeholder="Chưa có địa chỉ" name="writer[address]">
+            </div>
+            <div class="mb-3">
+                <label for="phoneNumber" class="form-label mx-3">Số điện thoại</label>
+                <input type="text" class="form-control w-75" id="phoneNumber" value="{{writer.phoneNumber}}"
+                    placeholder="Chưa có điện thoại" name="writer[phoneNumber]">
+            </div>
+            <div class="mb-3">
+                <label for="penName" class="form-label mx-3">Bút danh</label>
+                <input type="text" class="form-control w-75" id="txtPenName" value="{{writer.penName}}"
+                    placeholder="{{writer.fullName}}" name="writer[penName]">
+            </div>
+            <div class="mb-3">
+                <label for="bio" class="form-label mx-3">Tiểu sử</label>
+                <textarea class="form-control w-75" id="txtBio" rows="5" placeholder="Nhập tiểu sử của tác giả tại đây"
+                    name="writer[bio]">{{writer.bio}}</textarea>
+            </div>
+        </div>
+
+    </div>
+</form>
+{{#section 'js'}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+<script>
+    jQuery('#txtDOB').datetimepicker({
+        timepicker: false,
+        format: 'd/m/Y',
+        mask: true,
+    });
+
+    // Form validation
+    document.getElementById('editForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent form submission to check validation
+        // Get form values
+        const dob = document.getElementById('txtDOB').value;
+        // Check for age (must be 14 or older)
+        const dobDate = new Date(dob.split('/').reverse().join('-')); // Convert to YYYY-MM-DD
+        const age = new Date().getFullYear() - dobDate.getFullYear();
+        if (age < 14) {
+            Swal.fire('Lỗi', 'Bạn phải ít nhất 14 tuổi để đăng ký.', 'error');
+            return;
+        }
+        const penName = document.getElementById('txtPenName').value;
+        if (penName === '') {
+            Swal.fire('Lỗi', 'Không được để trống bút danh', 'error');
+            return;
+        }
+        const bio = document.getElementById('txtBio').value;
+        if (bio === '') {
+            Swal.fire('Lỗi', 'Bio không được để trống', 'error');
+            return;
+        }
+        this.submit();
+    });
+</script>
+<script>
+    function previewAvatar() {
+        const fileInput = document.getElementById("avatarInput");
+        const file = fileInput.files[0];
+
+        if (file) {
+            const fileType = file.type.split('/')[0]; // Get the file type (e.g., image, video, etc.)
+
+            // Check if the selected file is an image
+            if (fileType === 'image') {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    // Set the avatar preview image source
+                    const avatarPreview = document.getElementById("avatarDisplay");
+                    avatarDisplay.src = e.target.result;
+                };
+                reader.readAsDataURL(file); // Read the image file as a data URL
+            } else {
+                alert("Please select an image file.");
+                // Clear the input field to remove the non-image file
+                fileInput.value = "";
+            }
+        }
+    }
+</script>
+
+{{/section}}

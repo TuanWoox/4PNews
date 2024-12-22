@@ -1,0 +1,150 @@
+{{#section 'css'}}
+<link rel="stylesheet" href="/stylesheets/writer/article_list_writer.css">
+{{/section}}
+<div class="container my-6">
+  <!-- danh mục -->
+  <div class="row my-5 border-dark">
+    <div class="col-9">
+      <h5>Bài báo của bạn</h5>
+    </div>
+    <div class="col-3">
+      <div class="item d-flex align-items-center justify-content-end">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          {{#if status}}
+          {{statusVietNam}}
+          {{else}}
+          Tất cả
+          {{/if}}
+
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="?status=all" class="dropdown-item">Tất cả</a></li>
+          <li><a href="?status=draft" class="dropdown-item">Bản thảo</a></li>
+          <li><a href="?status=approved" class="dropdown-item">Đã được duyệt</a></li>
+          <li><a href="?status=published" class="dropdown-item">Đã được xuất bản</a></li>
+          <li><a href="?status=rejected" class="dropdown-item">Đã bị từ chối</a></li>
+        </ul>
+        <div class="button_add">
+          <a href="/writer/{{currentUser._id}}/addNews">
+            <img src="/images/pen-tool_128.png" alt="img" class="add_icon" style="width: 30px; height: 30px;" />
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="border-bottom border-2 mt-2 border-dark"></div>
+  </div>
+
+  <!-- card -->
+  <div>
+    {{#if listNews}}
+    {{#each listNews}}
+
+    <div class="mb-3 border-bottom border-3 border-dark">
+      <div class="card mb-3">
+        <div class="row g-0">
+          <div class="col-md-3">
+            <img src="{{thumbnail}}" class="img-fluid rounded-start img1" alt="img" />
+          </div>
+          <div class="col-md-9">
+            <div class="card-body">
+              {{#if (eq status 'draft')}}
+              <a href="#" class="status text-success">Bản nháp</a>
+              {{/if}}
+              {{#if (eq status 'rejected')}}
+              <a href="#" class="status text-danger">Bị từ chối</a>
+              {{/if}}
+              {{#if (eq status 'published')}}
+              {{#if (isLessThanDateNow publish.publishedDate)}}
+              <a href="#" class="status text-success">
+                Đã được xuất bản
+                <br>
+                Đã xuất bản vào {{convertToDisplayPublishedDate publish.publishedDate}}
+              </a>
+              {{else}}
+              <a href="#" class="status text-info">
+                Đã được phê duyệt
+                <br>
+                Sẽ xuất bản vào {{convertToDisplayPublishedDate publish.publishedDate}}
+              </a>
+              {{/if}}
+              {{/if}}
+              <h5 class="card-title">
+                <a href="/writer/{{author}}/viewNews/{{_id}}" style="text-decoration: none; color: black;">
+                  {{title}}
+                </a>
+              </h5>
+              <p class="card-text">
+                {{brief}}
+              </p>
+              <p class="card-text">
+                <small class="text-muted">Đăng vào {{convertToDisplayDate this}}</small>
+              </p>
+              <div class="tag_name">
+                {{#each tags}}
+                <a href="#" class="badge bg-secondary" style="text-decoration: none;">{{name}}</a>
+                {{/each}}
+              </div>
+              <div class="control my-3">
+                <form action="/writer/{{author}}/viewNews/{{_id}}?_method=DELETE" method="POST" class="my-3 ms-1">
+                  <button type="submit" class="btn btn-danger mx-2">
+                    Xóa
+                  </button>
+                  {{#if (eq status 'rejected')}}
+                  <a href="/writer/{{author}}/viewRejectedNews/{{_id}}" class="btn btn-primary me-2">Xem lí do bị từ
+                    chối</a>
+                  {{/if}}
+                  {{#if (or (eq status 'draft') (eq status 'rejected'))}}
+                  <a class="btn btn-info" href="/writer/{{author}}/editNews/{{id}}">
+                    Chỉnh sửa
+                  </a>
+                  {{/if}}
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/each}}
+    {{else}}
+    <div class="text-center py-3">
+      <img src="/images/empty-state-image1.png" alt="No items found" class="img-fluid mb-3" style="max-width: 300px;">
+      <h4>Chưa có bài báo nào</h4>
+      <p class="text-muted">Bạn chưa có bài báo nào thuộc mục này cả</p>
+    </div>
+    {{/if}}
+
+
+
+    {{#if listNews}}
+    <!-- change page -->
+    <!-- Pagination Section -->
+    <div class="btn_change_page d-flex justify-content-center align-items-center">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <!-- Previous Button -->
+          <li class="page-item {{#if (eq currentPage 1)}}disabled{{/if}}">
+            <a class="page-link" href="?status={{status}}&page={{subtract currentPage 1}}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+
+          <!-- Page Numbers -->
+          {{#each (range 1 totalPages)}}
+          <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+            <a class="page-link" href="?status={{../status}}&page={{this}}">{{this}}</a>
+          </li>
+          {{/each}}
+
+          <!-- Next Button -->
+          <li class="page-item {{#if (eq currentPage totalPages)}}disabled{{/if}}">
+            <a class="page-link" href="?status={{status}}&page={{add currentPage 1}}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  {{/if}}
+</div>
