@@ -9,7 +9,7 @@
         <div class="left-body"></div>
         <div class="body">
             <div class="d-flex justify-content-between align-items-center">
-                <a class="logo me-3" aria-current="page" href="#">{{news.category.name}}</a>
+                <a class="logo me-3" aria-current="page" href="/category/{{news.category._id}}">{{news.category.name}}</a>
                 <div class="card-text">
                 {{#if (eq news.status 'draft')}}
                 <p class="status text-success">Bản nháp</p>
@@ -89,31 +89,37 @@
                 Bình luận
             </div>
             <hr class="mt-1">
-            <div class="input-group flex-nowrap mb-3">
-                <input type="text" class="form-control" placeholder="Chia sẻ ý kiến của bạn" aria-label=""
-                    aria-describedby="addon-wrapping">
-            </div>
+            <form action="" method="post">
+                <div class="input-group flex-nowrap mb-3">
+                    <input name="comment" type="text" class="form-control" placeholder="Chia sẻ ý kiến của bạn" aria-label=""
+                        aria-describedby="addon-wrapping">
+                        <button type="submit">submit</button>
+                </div>
+            </form>
 
             <!-- Danh sách những bình luận -->
             <div>
                 <div class="my-3">
-                    <div class="d-flex align-items-center">
-                        <div class="">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKIPPiSgnktlk7gs0qK9z5ViXeNCwi71Ldig&s"
-                                class="rounded-circle shadow-1-strong me-3" width="60" height="60" alt="...">
-                        </div>
-                        <div class="col-md-11">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <div class="author-title ps-0">Tên độc giả</div>
-                                    <div class="card-text"><small class="text-muted">20/11/2024</small></div>
+                    {{#each listComment}}
+                        <div class="d-flex align-items-center border my-3">
+                            <div class="">
+                                {{#if news.author.profilePic.url}}
+                                    <img src="{{news.author.profilePic.url}}" class="img-thumbnail rounded-start" alt="..." />
+                                    {{else}}
+                                    <img src="/images/user.png" class="img-thumbnail rounded-start" alt="No Profile Picture" />
+                                {{/if}}
+                            </div>
+                            <div class="col-md-11">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="author-title ps-0">{{reader.fullName}}</div>
+                                        <div class="card-text"><small class="text-muted">{{convertToDisplayDate this}}</small></div>
+                                    </div>
+                                    <p class="card-text">{{content}}</p>
                                 </div>
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Et nemo,
-                                    laborum commodi dolor nihil itaque doloremque placeat minus, consectetur quisquam
-                                    pariatur qui, nam dicta soluta fuga cum maiores reprehenderit voluptatibus!</p>
                             </div>
                         </div>
-                    </div>
+                    {{/each}}
                 </div>
             </div>
 
