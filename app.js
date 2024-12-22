@@ -17,8 +17,9 @@ const passportGithub = require('./passportAuth/passportGithub');
 const hbs = require('express-handlebars-sections');
 const connectFlash = require('connect-flash');
 const User = require('./models/user');
+const MainCate = require('./models/mainCategory');
+const SubCate = require('./models/subCategory');
 const dbUrl = process.env.MONGO_URI || 'mongodb://localhost:27017/4PNEWS';
-
 // Initialize Express
 const app = express();
 const PORT = process.env.PORT || 4444;
@@ -50,6 +51,18 @@ app.engine('hbs', engine({
       
       return `${formattedDate} ${formattedTime}`; // Combine date and time
     },    
+    isPremiumStillValid(value){
+      const now = new Date();
+      return value > now;
+    },
+    convertToDate(value) {
+      const date = new Date(value);
+      // Format date as D/M/Y and time as H:MM (24-hour format)
+      const formattedDate = date.toLocaleDateString('en-GB');  // British English for D/M/Y format
+      const formattedTime = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); // Format time as HH:mm
+      
+      return `${formattedDate} ${formattedTime}`; // Combine date and time
+    }, 
     timesince(date) {
       const now = new Date(); // Current date and time
       const parsedDate = new Date(date); // Parse the input date
@@ -57,7 +70,6 @@ app.engine('hbs', engine({
       if (isNaN(parsedDate)) {
         return "Invalid date"; // Handle invalid dates
       }
-      
       const diff = now.getTime() - parsedDate.getTime(); // Difference in milliseconds
     
       if (diff < 0) {
@@ -66,16 +78,19 @@ app.engine('hbs', engine({
     
       const minutes = Math.floor(diff / 60000); // Convert to minutes
       if (minutes < 60) {
-        return `${minutes} mins ago`;
+        return `${minutes} min(s) ago`;
       }
     
       const hours = Math.floor(minutes / 60); // Convert to hours
       if (hours < 24) {
-        return `${hours} hours ago`;
+        return `${hours} hour(s) ago`;
       }
     
       const days = Math.floor(hours / 24); // Convert to days
-      return `${days} days ago`;
+      if(days <= 7) {
+        return `${days} day(s) ago`;
+      }
+      return date = new Date(parsedDate).toLocaleDateString('en-GB');
     },
     gt(value1, value2) {
       if (value1 === undefined || value2 === undefined) {
@@ -123,6 +138,7 @@ app.set('views', path.join(__dirname, 'views') );
 
 // Middleware setup
 app.use(express.static(path.join(__dirname, 'public'))); //serve static file
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 app.use(express.json({limit: '20mb'})); // Parse JSON payloads
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded data
 app.use(methodOverride('_method')); // Allow method override for PUT and DELETE
@@ -158,6 +174,7 @@ app.use(session({
       //secure: true
     }
 }));
+
   
 // Initialize Passport
 app.use(passport.initialize());
@@ -174,8 +191,11 @@ passport.use('github',passportGithub)
 //Routes imports
 const generalRoutes = require('./routes/general');
 const accountRoutes = require('./routes/account');
-const writerRoutes = require('./routes/writer');
 const userRoutes = require('./routes/user');
+const writerRoutes = require('./routes/writer');
+const editorRoutes = require('./routes/editor');
+const adminRoutes = require('./routes/admin');
+const apiRoutes = require('./routes/api');
 
 //Catch flash message and user!
 app.use((req,res,next) => {
@@ -201,8 +221,10 @@ app.use( async (req, res, next)=>{
 app.use('/account',accountRoutes);
 app.use('/user', userRoutes);
 app.use('/writer',writerRoutes);
+app.use('/editor',editorRoutes);
+app.use('/admin', adminRoutes)
+app.use('/api', apiRoutes);
 app.use('/', generalRoutes);
-
 
 
 

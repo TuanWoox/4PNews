@@ -7,25 +7,29 @@ const { cloudinary } = require('../cloudinary/postCloud');
 const Tag = require('../models/tag');
 module.exports.renderListDraft = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).populate('managedMainCate', '_id name');
-        const listOfSubCate = await SubCate.find({belongTo: user.managedMainCate._id});
-        // Extract SubCate IDs into an array
-        const subCateIds = listOfSubCate.map(subCate => subCate._id);
+        // Fetch the user and their managed subcategory
+        const user = await User.findById(req.params.id).populate('managedSubCate');
+        const managedSubCate = user.managedSubCate;
+
+        if (!managedSubCate) {
+            return res.status(404).send("Managed subcategory not found.");
+        }
+
         // Filter News based on category and status
         let query = {
-            category: { $in: subCateIds },
-            
-        };        
+            category: managedSubCate._id, // Directly match the managedCategory ID
+        };
+
         const status = ["All", "Draft", "Approved", "Published", "Rejected"];
         const temp = req.query.status ? req.query.status.toLowerCase() : "all";
 
         if (temp !== "all") {
-            query.status = temp; 
+            query.status = temp;
             if (temp === "published") {
-                query['publish.publishedDate'] = { $lt: new Date() }; 
+                query['publish.publishedDate'] = { $lt: new Date() };
             } else if (temp === "approved") {
                 query.status = 'published';
-                query['publish.publishedDate'] = { $gt: new Date() }; 
+                query['publish.publishedDate'] = { $gt: new Date() };
             }
         }
 
@@ -46,26 +50,19 @@ module.exports.renderListDraft = async (req, res) => {
             .skip((page - 1) * itemsPerPage) // Skip items for the current page
             .limit(itemsPerPage); // Limit the number of items per page
 
-        const page_items = [];
-        for (let i = 0; i < status.length; i++) {
-            const item = {
-                value: status[i],
-                isActive: status[i].toLowerCase() === temp 
-            }
-            page_items.push(item);
-        }
-
-        const managedMainCategory = user.managedMainCate;
+        const page_items = status.map((item) => ({
+            value: item,
+            isActive: item.toLowerCase() === temp,
+        }));
 
         res.render('editor/listNews', {
             layout: 'workspace',
             listNews: listNews,
             isEmpty: listNews.length === 0,
             page_items: page_items,
-            managedMainCategory,
+            managedSubCate,
             currentPage: page,
             totalPages: totalPages,
-            whoFor
         });
 
     } catch (error) {
@@ -73,8 +70,6 @@ module.exports.renderListDraft = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
-
-
 module.exports.detailsNews = async (req,res) => {
     const news = await News.findById(req.params.newsId)
     .populate('author', '_id bio penName profilePic')

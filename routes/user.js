@@ -14,4 +14,10 @@ router.route('/:id/profile')
 router.route('/:id/editProfile')
 .get(isLoggedIn,IsYou,userController.renderUserEditProfile)
 .patch(isLoggedIn,IsYou,upload.single('avatar'),userController.editProfile)
+
+router.route(`/:id/buyPremium`)
+.get(isLoggedIn,IsYou,userController.buyPremium);
+
+router.route(`/:id/premiumBillHistory`)
+.get(isLoggedIn,IsYou,userController.premiumBillHistory);
 module.exports = router;

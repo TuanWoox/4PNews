@@ -61,3 +61,21 @@ module.exports.isAdmin = async (req,res,next) => {
     }
     next();
 }
+module.exports.premiumNews = async (req,res,next) => {
+    if(!req.isAuthenticated())
+    {
+            req.session.returnTo = req.originalUrl; 
+            req.flash('error','Bạn chưa đăng nhập!!!');
+            return res.redirect('/account/signIn');
+    } else {
+        let now = new Date();
+        const news = await News.findById(req.params.newsId);
+        if(req.user.premium < now && news.isPremium) 
+        {
+                req.session.returnTo = req.originalUrl; 
+                req.flash('error','Bạn chưa gia hạn premium');
+                return res.redirect('/');
+        } 
+    }
+    next();
+}

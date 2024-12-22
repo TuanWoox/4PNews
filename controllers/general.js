@@ -2,9 +2,11 @@ const User = require('../models/user');
 const News = require('../models/news');
 const Tag = require('../models/tag');
 const { cloudinary } = require('../cloudinary/postCloud');
+const cheerio = require('cheerio');
 const MainCate = require('../models/mainCategory');
 const SubCate = require('../models/subCategory');
 const Comment = require('../models/comment')
+const mongoose = require('mongoose'); 
 
 module.exports.renderHome = async (req, res) => {
     const role = req.user ? req.user.role : "";
@@ -52,7 +54,7 @@ module.exports.renderHome = async (req, res) => {
         { $match: { category: { $ne: null } } },
         { $group: { _id: "$category", totalViews: { $sum: "$views" } } },
         { $sort: { totalViews: -1, _id: 1 } },
-        { $limit: 4 },
+        { $limit: 10 },
         {
             $lookup: {
                 from: "subcategories",
@@ -67,13 +69,16 @@ module.exports.renderHome = async (req, res) => {
 
     const topSubCategoriesWithNews = await Promise.all(
         topSubCategories.map(async (subCategory) => {
-            const newestNews = await News.findOne({ category: subCategory.subCategoryId })
-                .sort({ 'publish.publishedDate': -1, _id: -1 }) 
+            const newestNews = await News.findOne({ 
+                category: subCategory.subCategoryId ,
+                "publish.publishedDate": { $lt: new Date() }, // Ensure publishedDate < current date
+            })
+                .sort({ 'publish.publishedDate': -1, _id: -1 }) // Deterministic sorting
                 .populate('author', '_id penName')
                 .populate('tags', '_id name');
 
             return {
-                subCategoryId: subCategory.subCategoryId,
+                _id: subCategory.subCategoryId,
                 name: subCategory.name,
                 totalViews: subCategory.totalViews,
                 news: newestNews
@@ -91,7 +96,6 @@ module.exports.renderHome = async (req, res) => {
             };
         })
     );
-
     res.render('home', {
         allMainCate: mainCateWithSub,
         listNews,
@@ -194,6 +198,10 @@ module.exports.renderFindByTag = async (req, res) => {
         listNews,
         empty: listNews.length === 0, 
         page_items: page_items,
+        hasPrevious: page > 1,
+        previousPage: page > 1 ? page - 1 : null,
+        hasNext: page < nPages,
+        nextPage: page < nPages ? page + 1 : null,
     });
 };
 
@@ -249,7 +257,13 @@ module.exports.renderFindBySubCate = async (req,res) => {
         mainCate: mainCate,
         subCates,
         empty: listNews.length === 0, 
-        listNews
+        listNews,
+        page_items,
+        subCate,
+        hasPrevious: page > 1,
+        previousPage: page > 1 ? page - 1 : null,
+        hasNext: page < nPages,
+        nextPage: page < nPages ? page + 1 : null,
     });
 }
 
@@ -333,7 +347,11 @@ module.exports.searchNews = async (req, res) => {
             query,
             categories_items,
             time,
-            page_items
+            page_items,
+            hasPrevious: page > 1,
+            previousPage: page > 1 ? page - 1 : null,
+            hasNext: page < nPages,
+            nextPage: page < nPages ? page + 1 : null,
         });
     } catch (error) {
         console.error('Error performing search:', error);

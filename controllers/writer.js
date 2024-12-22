@@ -71,7 +71,9 @@ module.exports.renderWriterNewsForm = async (req, res) => {
     const perPage = 5; // Number of news per page
     const currentPage = parseInt(page); // Convert page to an integer for calculations
 
-    const query = {};
+    const query = {
+        author: req.user._id,
+    };
     if (status !== 'all') {
         query.status = status; 
         // If status is "published", add the condition for publishedDate

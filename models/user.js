@@ -25,7 +25,6 @@ const userSchema = new Schema({
     },
     dateOfBirth: {
         type: Date,
-        required: [true, "Date of birth is required"],
         validate: {
             validator: function(value) {
                 const today = new Date();
@@ -49,14 +48,11 @@ const userSchema = new Schema({
         default: "user"
     },
     premium: {
-        endDate: {
-            type: Date,
-            default: null // Optional: Only populated when premium is active
-        }
+        type: Date,
+        default: null
     },
     gender: {
         type: String,
-        required: true,
         enum: ["female","male"],
         default: "male"
     },
@@ -78,9 +74,9 @@ const userSchema = new Schema({
     bio : {
         type: String,
     },
-    managedMainCate: {
+    managedSubCate: {
         type: Schema.Types.ObjectId,
-        ref:'MainCategory'
+        ref:'SubCategory'
     }
 }, {
     timestamps: true // Automatically add `createdAt` and `updatedAt` fields
