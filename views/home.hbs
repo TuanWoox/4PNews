@@ -1,0 +1,254 @@
+{{#section 'css'}}
+<link rel="icon" href="/images/icon.png">
+    <title>Trang chủ</title>
+{{/section}}
+
+<br>
+<div id="carouselBasicExample" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        {{#each listHotNews}}
+        <button type="button" data-bs-target="#carouselBasicExample" data-bs-slide-to="{{@index}}"
+            class="{{#if @first}}active{{/if}}" aria-current="{{#if @first}}true{{/if}}"
+            aria-label="Slide {{@index}}"></button>
+        {{/each}}
+    </div>
+
+    <div class="carousel-inner">
+        {{#each listHotNews}}
+        <div class="carousel-item {{#if @first}}active{{/if}}">
+            <img src="{{thumbnail}}" class="d-block w-100 h-25" alt="{{title}}" />
+            <div class="carousel-caption d-none d-md-block top-left-caption">
+                <p>{{title}}</p>
+                <h5>{{brief}}</h5>
+                <a class="nav-link" href="/detail/{{_id}}" target="_blank">Đọc thêm
+                    <i class="bi bi-arrow-up-right-square p-2"></i>
+                </a>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselBasicExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselBasicExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<br>
+<div class="d-flex justify-content-between">
+        <div></div>
+        <div class="d-flex  align-items-center" id="sub-nav">
+            <div class="logo px-3">
+                Tin mới nhất
+            </div>
+        </div>
+        <div></div>
+    </div>
+
+<!-- News Carousel for "Tin mới nhất" -->
+<div class="news-carousel-container d-flex align-items-center justify-content-between" id="carousel-newest">
+    <!-- Previous button -->
+    <button class="btn btn-outline-primary btn-prev">
+        <i class="bi bi-arrow-left"></i>
+    </button>
+
+    <!-- News Carousel -->
+    <div class="news-carousel overflow-hidden">
+        <div class="d-flex news-track">
+            {{#each listNews}}
+                <div class="news-item flex-shrink-0" style="width: 25%;">
+                    <div class="card-header">
+                        <a href="/category/{{category._id}}" class="text-decoration-none"><h4 class="nav-link ps-0">{{category.name}}</h4></a>
+                    </div>
+                    <div class="card h-100">
+                        <img src="{{thumbnail}}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <a href="/detail/{{_id}}" class="nav-link ps-0">{{title}}</a>
+                            <p class="card-title">{{brief}}</p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated {{timesince publish.publishedDate}}</small>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+
+    <!-- Next button -->
+    <button class="btn btn-outline-primary btn-next">
+        <i class="bi bi-arrow-right"></i>
+    </button>
+</div>
+
+<br>
+
+<div class="d-flex justify-content-between">
+        <div></div>
+        <div class="d-flex  align-items-center" id="sub-nav">
+            <div class="logo px-3">
+                Tin nổi bật
+            </div>
+        </div>
+        <div></div>
+    </div>
+
+<!-- News Carousel for "Tin nổi bật" -->
+<div class="news-carousel-container d-flex align-items-center justify-content-between" id="carousel-hot">
+    <!-- Previous button -->
+    <button class="btn btn-outline-primary btn-prev">
+        <i class="bi bi-arrow-left"></i>
+    </button>
+
+    <!-- News Carousel -->
+    <div class="news-carousel overflow-hidden">
+        <div class="d-flex news-track">
+            {{#each topHotNews}}
+                <div class="news-item">
+                    <div class="card-header">
+                        <a href="/category/{{category._id}}" class="text-decoration-none"><h4 class="nav-link ps-0">{{category.name}}</h4></a>
+                    </div>
+                    <div class="card h-100">
+                        <img src="{{thumbnail}}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <a href="/detail/{{_id}}" class="nav-link ps-0">{{title}}</a>
+                            <p class="card-title">{{brief}}</p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated {{timesince publish.publishedDate}}</small>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+
+    <!-- Next button -->
+    <button class="btn btn-outline-primary btn-next">
+        <i class="bi bi-arrow-right"></i>
+    </button>
+</div>
+
+
+<br>
+
+<div class="d-flex justify-content-between">
+    <div></div>
+    <div class="d-flex  align-items-center" id="sub-nav">
+        <div class="logo px-3">            
+            Top chuyên mục
+        </div>
+    </div>
+    <div></div>
+</div>
+
+<div class="news-carousel-container d-flex align-items-center justify-content-between" id="carousel-hot-cate">
+    <!-- Previous button -->
+    <button class="btn btn-outline-primary btn-prev">
+        <i class="bi bi-arrow-left"></i>
+    </button>
+
+    <!-- News Carousel -->
+    <div class="news-carousel overflow-hidden">
+        <div class="d-flex news-track">
+            {{#each topSubCategoriesWithNews}}
+                {{#if news}}
+                    <div class="news-item flex-shrink-0" style="width: 25%; box-sizing: border-box; padding: 10px;">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <a class="text-decoration-none" href="/category/{{_id}}">
+                                    <h4 class="nav-link ps-0">{{name}}</h4>
+                                </a>
+                            </div>
+                            <img src="{{news.thumbnail}}" class="card-img-top" alt="{{news.title}}">
+                            <div class="card-body">
+                                <a class="text-decoration-none" href="/detail/{{news._id}}">
+                                    <h5 class="nav-link ps-0 text-decoration-none">{{news.title}}</h5>
+                                </a>
+                                <p class="card-text">{{news.brief}}</p>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">Last updated {{timesince news.publish}}</small>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+            {{/each}}
+        </div>
+    </div>
+
+    <!-- Next button -->
+    <button class="btn btn-outline-primary btn-next">
+        <i class="bi bi-arrow-right"></i>
+    </button>
+</div>
+
+
+
+{{#section 'js'}}
+<script>
+    function initCarousel(carouselId) {
+        const prevBtn = document.querySelector(`#${carouselId} .btn-prev`);
+        const nextBtn = document.querySelector(`#${carouselId} .btn-next`);
+        const track = document.querySelector(`#${carouselId} .news-track`);
+        const items = Array.from(document.querySelectorAll(`#${carouselId} .news-item`));
+        const visibleCount = 4; // Number of visible items
+        const totalItems = items.length;
+
+        let currentIndex = 0; // Keeps track of the starting position of visible items
+        let isAnimating = false; // Prevent rapid clicking
+
+        function updateCarousel(animate = true) {
+            const totalVisibleItems = visibleCount; // Visible items = 4
+            const totalBufferItems = 4; // Add 2 buffer items for smooth scroll
+            const totalNeededItems = totalVisibleItems + totalBufferItems;
+
+            if (animate) {
+                track.classList.add("animate");
+            } else {
+                track.classList.remove("animate");
+            }
+
+            // Ensure the track always shows the correct number of items
+            track.innerHTML = ""; // Clear existing items
+            for (let i = 0; i < totalNeededItems; i++) {
+                const index = (currentIndex + i - 1 + totalItems) % totalItems; // Circular index
+                const clonedItem = items[index].cloneNode(true);
+                track.appendChild(clonedItem);
+            }
+
+        }
+        function handleNavigation(direction) {
+            if (isAnimating) return; // Prevent rapid clicks
+            isAnimating = true;
+
+            if (direction === "next") {
+                currentIndex = (currentIndex + 1) % totalItems;
+                track.style.transform = "translateX(-50%)"; // Move next
+            } else {
+                currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+                track.style.transform = "translateX(0%)"; // Move previous
+            }
+
+            // Wait for transition to finish, then reset
+            setTimeout(() => {
+                updateCarousel(false);
+                isAnimating = false;
+            }, 300); // Match the CSS transition time
+        }
+
+        nextBtn.addEventListener("click", () => handleNavigation("next"));
+        prevBtn.addEventListener("click", () => handleNavigation("prev"));
+
+        // Initialize the carousel display
+        updateCarousel(false);
+    }
+    initCarousel("carousel-newest");
+    initCarousel("carousel-hot");
+    initCarousel("carousel-hot-cate")
+
+</script>
+{{/section}}
