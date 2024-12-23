@@ -1,0 +1,79 @@
+<div class="d-flex justify-content-between">
+    <div class="left-body"></div>
+    <div class="body">
+        <div class="d-flex justify-content-between align-items-center">
+            <a class="logo me-3" aria-current="page" href="#">{{news.category.name}}</a>
+            <div>
+                {{#if (eq news.status 'published')}}
+                   <div class="card-text text-muted text-end">Trạng thái: Đã xuất bản</div>
+                    <div class="card-text text-muted text-end">Ngày xuất bản: {{convertToDisplayPublishedDate news.publish.publishedDate}}</div>
+                {{/if}}
+                {{#if (eq news.status 'draft')}}
+                   <div class="card-text text-muted text-end">Trạng thái: Đang chờ duyệt</div>
+                {{/if}}
+                
+            </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-2">
+            <div>
+                {{#each news.tags}}
+                     <button type="button" class="btn btn-outline-primary">{{name}}</button>
+                {{/each}}
+              
+            </div>
+        </div>
+        <div class="post-title mt-2">{{news.title}}</div>
+        <div class="post-content mt-2">
+            <div class="mb-2">
+                {{news.brief}}
+            </div>
+            <div>
+                {{{news.content}}}
+            </div>
+        </div>
+        <div class="card my-5">
+            <div class="row g-0">
+                <div class="col-md-2">
+                    <img src="{{news.author.profilePic.url}}"
+                        class="img-thumbnail rounded-start" alt="...">
+                </div>
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="author-title ps-0">{{news.author.penName}}</div>
+                            <div class="author-title">
+                                Tác giả
+                                <i class="bi bi-pencil ms-2"></i>
+                            </div>
+                        </div>
+                        <p class="card-text">{{news.author.bio}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        <div class="d-flex justify-content-center">
+            <a href="/admin/news?category={{category}}&status={{status}}" class="btn btn-outline-primary me-3">
+                Quay lại chuyên mục
+            </a>
+            <form action="/admin/news/{{news._id}}?_method=DELETE" method="POST">
+            <button type="" class="btn btn-outline-danger me-3">
+                Xóa
+            </button>
+            </form>
+            {{#if (eq news.status 'draft')}}
+                <form action="/admin/news/{{news._id}}?_method=PATCH" method="POST">
+                <button type="" class="btn btn-outline-success me-3">
+                    Xuất bản ngay
+                </button>
+                </form>
+            {{/if}}
+           
+        </div>
+        <hr>
+    </div>
+
+
+    <div class="right-body"></div>
+</div>

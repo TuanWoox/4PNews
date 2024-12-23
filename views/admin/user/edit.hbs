@@ -1,0 +1,82 @@
+<div class="d-flex justify-content-center">
+    <div class="body">
+        <form action="/admin/users/{{user._id}}?_method=PATCH" method="post">
+            <div class="card">
+                <h4 class="card-header">
+                    Chỉnh sửa thông tin người dùng
+                </h4>
+                <div class="card-body">
+                    <div class="form-group mb-3">
+                        <label for="txtCatName">Tên người dùng</label>
+                        <input type="text" name="CatName" id="txtCatName" class="form-control" placeholder="" readonly value="{{user.fullName}}">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="txtCatName">Email</label>
+                        <input type="text" name="CatName" id="txtCatName" class="form-control" placeholder="" readonly value="{{user.email}}">
+                    </div>
+                    {{#if (isStillPremiumUser user)}}
+                       hehehe
+                    {{/if}}
+                    <div class="form-group mb-3">
+                        <label for="category">Loại người dùng</label>
+                        <select name="role" id="role" class="form-control" required>
+                            <option value="" disabled selected>Chọn loại người dùng</option>
+                            <option value="user" {{#if (eq user.role 'user')}}selected{{/if}}>Độc giả</option>
+                            <option value="writer" {{#if (eq user.role 'writer')}}selected{{/if}}>Phóng viên</option>
+                            <option value="editor" {{#if (eq user.role 'editor')}}selected{{/if}}>Biên tập viên</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3" id="mainCateSelector" style="display: {{#if (eq user.role 'editor')}}block{{else}}none{{/if}}">
+                        <label for="category">Chuyên mục quản lí</label>
+                        <select name="managedMainCate" id="category" class="form-control" required>
+                            <option value="" disabled selected>Chọn chuyên mục</option>
+                            {{#each mainCateslist}}
+                            <option value="{{_id}}" 
+                            {{#if ../user.managedMainCate}}
+                            {{#if (eq ../user.managedMainCate _id)}}selected{{/if}}
+                            {{/if}}>{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <a href="/admin/users" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-left"></i>
+                        Quay lại
+                    </a>
+                    <button type="submit" class="btn btn-outline-success">
+                        <i class="bi bi-check2"></i>
+                        Lưu
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<br>
+{{#section 'js'}}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const roleElement = document.querySelector('#role');
+        const mainCateSelectorElement = document.querySelector('#mainCateSelector');
+
+        // Function to toggle visibility based on role
+        function checkUserType() {
+            const userType = roleElement.value;
+            if (userType !== "editor") {
+                mainCateSelectorElement.style.display = 'none';
+            } else {
+                mainCateSelectorElement.style.display = 'block';
+            }
+        }
+
+        // Initialize visibility on page load
+        checkUserType();
+
+        // Add event listener for role change
+        roleElement.addEventListener('change', checkUserType);
+    });
+</script>
+
+
+{{/section}}

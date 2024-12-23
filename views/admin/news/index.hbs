@@ -1,0 +1,145 @@
+<div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-between align-items-center body">
+        <div class="logo me-3">
+            Danh sách bài viết
+        </div>
+        <div class="d-flex">
+            <div class="dropdown me-3">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    {{#each listMainCategories}}
+                    {{#if (eq ../category _id)}}{{name}}{{/if}}
+                    {{/each}}
+                    {{#if (eq category 'all')}}
+                       Tất cả chuyên mục
+                    {{/if}}
+
+                    
+                </button>
+                <ul class="dropdown-menu">
+                    {{#each listMainCategories}}
+                    <li>
+                        <a class="dropdown-item {{#if (eq ../category _id)}}active{{/if}}" href="?category={{_id}}">
+                            {{name}}
+                        </a>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+
+
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    {{#if (eq status 'draft')}}
+                       Chưa duyệt cho xuất bản
+                    {{/if}}
+                    {{#if (eq status 'published')}}
+                       Đã xuất bản                     
+                    {{/if}}
+                    {{#if (eq status 'all')}}
+                       Tất cả                     
+                    {{/if}}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" href="?category={{category}}&status=draft">Chưa duyệt cho xuất bản</a></li>
+                    <li><a class="dropdown-item" href="?category={{category}}&status=published">Đã xuất bản</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-flex justify-content-center mb-3">
+    <div id="sub-nav-bot"></div>
+</div>
+{{#if listNews}}
+{{#each listNews}}
+<div class="d-flex justify-content-center">
+    <div class="card mb-3 body">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="{{thumbnail}}" class="img-fluid rounded-start h-100" style="object-fit: cover;" alt="...">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="nav-link ps-0">{{category.name}}</h5>
+                    <h5 class="card-title"><a href="/admin/news/detailNews/{{_id}}"
+                            style="text-decoration: none;">{{title}}</a></h5>
+                    <p class="card-text">{{brief}}</p>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="card-text"><small class="text-muted">{{timesince updatedAt}}</small></div>
+                        <div>
+                            {{#each tags}}
+                            <button type="button" class="btn btn-outline-secondary">{{name}}</button>
+                            {{/each}}
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Trạng thái xuất bản:
+                            {{#if (eq status 'draft')}}
+                            <a href="#" class="status text-success">Chờ duyệt</a>
+                            {{/if}}
+                            {{#if (eq status 'rejected')}}
+                            <a href="#" class="status text-danger">Bị từ chối</a>
+                            {{/if}}
+                            {{#if (eq status 'published')}}
+                            {{#if (isLessThanDateNow publish.publishedDate)}}
+                            <a href="#" class="status text-success">
+                                Đã được xuất bản
+                                <br>
+                                Đã xuất bản vào {{convertToDisplayPublishedDate publish.publishedDate}}
+                            </a>
+                            {{else}}
+                            <a href="#" class="status text-info">
+                                Đã được phê duyệt
+                                <br>
+                                Sẽ xuất bản vào {{convertToDisplayPublishedDate publish.publishedDate}}
+                            </a>
+                            {{/if}}
+                            {{/if}}
+
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{/each}}
+{{else}}
+<div class="text-center py-3">
+    <img src="/images/empty-state-image1.png" alt="No items found" class="img-fluid mb-3" style="max-width: 300px;">
+    <h4>Chưa có bài báo nào cả</h4>
+    <p class="text-muted">Hãy quay lại sau</p>
+</div>
+{{/if}}
+
+{{#if listNews}}
+<!-- Pagination Section -->
+<div class="btn_change_page d-flex justify-content-center align-items-center">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <!-- Previous Button -->
+            <li class="page-item {{#if (eq currentPage 1)}}disabled{{/if}}">
+                <a class="page-link" href="?category={{../category}}&status={{../status}}&page={{subtract currentPage 1}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <!-- Page Numbers -->
+            {{#each (range 1 totalPages)}}
+            <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+                <a class="page-link" href="?category={{../category}}&status={{../status}}&page={{this}}">{{this}}</a>
+            </li>
+            {{/each}}
+
+            <!-- Next Button -->
+            <li class="page-item {{#if (eq currentPage totalPages)}}disabled{{/if}}">
+                <a class="page-link" href="?category={{../category}}&status={{../status}}&page={{add currentPage 1}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+{{/if}}

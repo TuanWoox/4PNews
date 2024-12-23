@@ -1,0 +1,28 @@
+
+<div class="d-flex justify-content-center">
+    <div class="body">
+        <form action="/admin/tags/{{tag._id}}?_method=PATCH" method="post">
+            <div class="card">
+                <h4 class="card-header">
+                    Sửa tag
+                </h4>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="txtCatName">Tên tag</label>
+                        <input type="text" name="tagName" id="txtCatName" class="form-control" placeholder="" value="{{tag.name}}">
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <a href="/admin/tags" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-left"></i>
+                        Quay lại
+                    </a>
+                    <button type="submit" class="btn btn-outline-success">
+                        <i class="bi bi-check2"></i>
+                        Lưu
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

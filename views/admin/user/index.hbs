@@ -1,0 +1,82 @@
+<div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-between align-items-center body">
+        <div class="logo me-3">
+            Người Dùng
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                {{#if (eq role 'user')}}
+                Độc giả
+                {{else if (eq role 'premium')}}
+                Premium
+                {{else if (eq role 'writer')}}
+                Phóng viên
+                {{else if (eq role 'editor')}}
+                Biên tập viên
+                {{else}}
+                Loại người dùng
+                {{/if}}
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item {{#if (eq role 'user')}} active {{/if}}" href="?role=user">Độc giả</a></li>
+                <li><a class="dropdown-item {{#if (eq role 'premium')}} active {{/if}}" href="?role=premium">Premium</a>
+                </li>
+                <li><a class="dropdown-item {{#if (eq role 'writer')}} active {{/if}}" href="?role=writer">Phóng
+                        viên</a></li>
+                <li><a class="dropdown-item {{#if (eq role 'editor')}} active {{/if}}" href="?role=editor">Biên tập
+                        viên</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="d-flex justify-content-center mb-3">
+    <div id="sub-nav-bot"></div>
+</div>
+
+<div class="d-flex justify-content-center">
+    <div class="body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Tên người dùng</th>
+                    <th>Email đăng ký</th>
+                    <th>Loại người dùng</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each users}}
+                <tr>
+                    <td scope="row">{{@index}}</td>
+                    <td>{{fullName}}</td>
+                    <td>{{email}}</td>
+                    <td>
+                        {{#if (eq role 'user')}}
+                        Người dùng
+                        {{/if}}
+                        {{#if (eq role 'writer')}}
+                        Phóng Viên
+                        {{/if}}
+                        {{#if (eq role 'editor')}}
+                        Biên tập viên
+                        {{/if}}
+                    </td>
+                    <td class="text-end">
+                        <a href="/admin/users/{{_id}}/edit" class="btn btn-sm btn-outline-primary" role="button">
+                            <i class="bi bi-pencil-square"></i>
+                            Chỉnh sửa
+                        </a>
+                        <a href="" class="btn btn-sm btn-outline-danger" role="button">
+                            <i class="bi bi-x-square"></i>
+                            Xóa
+                        </a>
+                    </td>
+                </tr>
+                {{/each}}
+
+            </tbody>
+        </table>
+    </div>
+</div>
