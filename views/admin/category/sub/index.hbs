@@ -1,0 +1,84 @@
+<div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-between align-items-center body">
+            <div class="logo me-3">
+                {{mainCate.name}}
+            </div>
+            <a href="/admin/mainCategories/{{mainCate._id}}/addSubCategory" class="btn btn-sm btn-outline-primary" role="button">
+                <i class="bi bi-plus-square"></i>
+                Thêm chuyên mục cấp 2 mới
+            </a>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center mb-3">
+        <div id="sub-nav-bot"></div>
+    </div>
+<div class="d-flex justify-content-center">
+    <div class="body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Chuyên mục cấp 2</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each listOfSubCates}}
+                <tr>
+                   <td scope="row">{{add @index ../offset}}</td>
+                    <td>
+                        <a href="" style="text-decoration: none;">
+                            {{name}}
+                        </a>
+                    </td>
+                    <td class="text-end">
+                        <form action="/admin/mainCategories/{{belongTo}}/{{_id}}?_method=DELETE" method="post">
+                        <a href="/admin/mainCategories/{{../mainCate._id}}/editSubCate/{{_id}}" class="btn btn-sm btn-outline-primary" role="button">
+                            <i class="bi bi-pencil-square"></i>
+                            Chỉnh sửa
+                        </a>
+                        <button class="btn btn-sm btn-outline-danger" role="button" type="submit">
+                            <i class="bi bi-x-square"></i>
+                            Xóa
+                        </button>
+                        </form>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <a href="/admin/mainCategories" class="btn btn-outline-primary mt-3">
+            <i class="bi bi-arrow-left"></i>
+            Quay lại
+        </a>
+    </div>
+</div>
+{{#if listOfSubCates}}
+<!-- Pagination Section -->
+<div class="btn_change_page d-flex justify-content-center align-items-center">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <!-- Previous Button -->
+            <li class="page-item {{#if (eq currentPage 1)}}disabled{{/if}}">
+                <a class="page-link" href="?page={{subtract currentPage 1}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <!-- Page Numbers -->
+            {{#each (range 1 totalPages)}}
+            <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+                <a class="page-link" href="?page={{this}}">{{this}}</a>
+            </li>
+            {{/each}}
+
+            <!-- Next Button -->
+            <li class="page-item {{#if (eq currentPage totalPages)}}disabled{{/if}}">
+                <a class="page-link" href="?page={{add currentPage 1}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+{{/if}}
