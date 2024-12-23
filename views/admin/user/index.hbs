@@ -64,14 +64,16 @@
                         {{/if}}
                     </td>
                     <td class="text-end">
+                        <form action="/admin/users/{{_id}}?_method=DELETE" method="post">
                         <a href="/admin/users/{{_id}}/edit" class="btn btn-sm btn-outline-primary" role="button">
                             <i class="bi bi-pencil-square"></i>
                             Chỉnh sửa
                         </a>
-                        <a href="" class="btn btn-sm btn-outline-danger" role="button">
+                        <button class="btn btn-sm btn-outline-danger" role="button" type="submit">
                             <i class="bi bi-x-square"></i>
                             Xóa
-                        </a>
+                        </button>
+                        </form>
                     </td>
                 </tr>
                 {{/each}}
@@ -80,3 +82,4 @@
         </table>
     </div>
 </div>
+<a class="ms-auto btn btn-outline-primary me-5" href="/admin/createUser">Tạo tài khoản</a>

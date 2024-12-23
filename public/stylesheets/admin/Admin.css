@@ -18,9 +18,6 @@
     border: 3px #E82A00 solid;
     text-align: center;
 }
-.dropdown-menu {
-    z-index: 1040;
-}
 
 .nav-link {
     color: black;
@@ -31,6 +28,12 @@
     line-height: 1.1; /* Relative for better scaling */
     word-wrap: break-word;
 }
+
+.nav-link.active {
+    color: #E82A00 !important;
+    text-decoration: underline !important;
+}
+
 
 .nav-link:hover {
     text-decoration: underline;
@@ -48,7 +51,7 @@
     text-decoration: underline;
 }
 
-.nav-link:not([aria-expanded="true"]):not(:hover) {
+.nav-link:not([aria-expanded="true"]):not(:hover):not(.active) {
     color: black;
     text-decoration: none;
 }
@@ -92,122 +95,33 @@
     text-shadow: 0 0 2px black;
 }
 
-.carousel-inner .nav-link {
-    color: white !important;
-    font-family: serif;
-    padding-left: 0px;
-}
-
-.carousel-inner .nav-link:hover {
-    color: #E82A00 !important;
-    text-decoration: underline;
-}
-
-.carousel-control-prev,
-.carousel-control-next {
-    width: 5%;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.carousel-control-prev {
-    left: 10px;
-}
-
-.carousel-control-next {
-    right: 10px;
-}
-
-.card-footer {
-    margin-top: auto;
-    padding: 10px;
-}
-.news-carousel-container {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center; /* Center carousel horizontally */
-    align-items: center;    /* Center carousel vertically */
-    overflow: hidden;
-    margin: 20px 0; /* Add spacing around the carousel */
-}
-
-.news-track {
-    width: fit-content;
-    display: flex;
-    flex-wrap: nowrap; 
-    justify-content: space-between;
-    align-items: stretch; /* Stretch items to align vertically */
-    transition: transform 0.3s ease-in-out;
-}
-
-.news-item {
-    flex: 0 0 25%; /* Fixed width for consistent layout */
-    width: 400px;
-    height: 400;
-    padding: 15px;
-    margin: 0; /* Remove additional margins */
-    box-sizing: border-box;
-    text-align: center;
-    transition: transform 0.2s ease-in-out;
-    overflow: hidden;
-    background-color: #fff; /* Add background color */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-
-.news-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add hover shadow */
-}
-
-
-.btn-prev,
-.btn-next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    transition: background-color 0.2s ease;
-}
-
-.btn-prev:hover,
-.btn-next:hover {
-    background-color: rgba(0, 0, 0, 0.7);
-}
-
-.btn-prev {
-    left: 50px;
-}
-
-.btn-next {
-    right: 50px;
-}
-
 #popular {
     padding-right: 20px;
 }
 
 #sub-nav {
-    border-bottom: 1px solid black;
-    width: fit-content;
+    width: 1100px;
+}
+
+.filter-label {
+    width: 120px;
+}
+
+.filter {
+    width: 540px;
+}
+
+.margin-filter {
+    margin-left: 210px;
+}
+
+#sub-nav-bot {
+    border-bottom:1px solid black ;
+    width: 80%;
 }
 
 .margin-post {
-    margin-left: 200px;
-    margin-right: 200px;
+    max-width: 1100px;
 }
 
 .card-img-top {
@@ -217,46 +131,48 @@
     border-radius: 0; /* Xóa bo tròn nếu cần */
 }
 
-.sticky-navbar {
-    position: sticky;
-    top: 0;
-    z-index: 1030; /* Ensures it stays above other elements */
-    background-color: #f8f9fa; /* Optional: Keeps background color consistent */
-    opacity: 0.7;
-    transition: opacity 0.3s ease, transform 0.3s ease; 
-}
-.sticky-navbar:hover {
-    opacity: 1;
-    transform: scale(1.02); 
+.body {
+    width: 80%;
 }
 
-.news-container {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
+.sub-body {
+    width: 50%
 }
 
-.news-item {
-    flex: 1;
-    min-width: 24%;
-    margin: 0 10px;
-    transition: transform 0.5s ease;
+.post-title {
+    color: black;
+    font-size: 30px;
+    font-weight: 600;
 }
+
+.post-content {
+    font-size: 18px;
+    line-height: 160%;
+    font-weight: 400;
+}
+
+.author-title {
+    color: black;
+    font-size: 24px;
+    font-weight: bold;
+}
+
 .footer {
     width: 100%;
-    margin-top: 30px;
     margin-left: 0px;
     margin-right: 0px;
-}
+    margin-top: auto !important;  /* Push the footer to the bottom */
+} 
 
 /* Responsive styles (mobile-first approach) */
-@media (max-width: 1300px) {
+@media (max-width: 1286px) {
     .search-bar {
         min-width: 500px;
     }
 
     .margin-post {
-        margin-left: 100px;
-        margin-right: 100px;
+        margin-left: 20px;
+        margin-right: 20px;
     }
 }
 
@@ -342,3 +258,14 @@
         margin-right: 10px;
     }
 }
+html, body {
+    height: 100%;
+    margin: 0; /* Remove any default margin */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+

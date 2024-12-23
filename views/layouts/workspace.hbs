@@ -17,7 +17,20 @@
   <link rel="stylesheet" href="/stylesheets/admin/Admin.css" />
   {{/if}}
   {{{_sections.css}}}
-  <title>{{title}}</title>
+  <title>Workspace: 
+    {{#if (eq currentUser.role "editor")}}
+          EDITOR
+          {{/if}}
+          {{#if (eq currentUser.role "admin")}}
+          ADMIN
+          {{/if}}
+          {{#if (eq currentUser.role "writer")}}
+          WRITER
+          {{/if}}
+          {{#if (eq currentUser.role "user")}}
+          WRITER
+          {{/if}}
+  </title>
 </head>
 
 <body>
@@ -115,6 +128,9 @@
         <li class="nav-item">
           <a class="nav-link {{#if (eq activePage "users")}}active{{/if}}" aria-current="page" href="/admin/users">Người
             dùng</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{#if (eq activePage "premium")}}active{{/if}}" aria-current="page" href="/admin/premiums">Duyệt Premium</a>
         </li>
       </div>
     </ul>

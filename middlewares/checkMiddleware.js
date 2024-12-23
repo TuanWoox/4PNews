@@ -62,6 +62,9 @@ module.exports.isAdmin = async (req,res,next) => {
     next();
 }
 module.exports.premiumNews = async (req,res,next) => {
+    const news = await News.findById(req.params.newsId);
+    if(news.isPremium)
+    {
     if(!req.isAuthenticated())
     {
             req.session.returnTo = req.originalUrl; 
@@ -78,4 +81,5 @@ module.exports.premiumNews = async (req,res,next) => {
         } 
     }
     next();
+}
 }

@@ -10,10 +10,10 @@ module.exports = new GitHubStrategy(
   async (accessToken, refreshToken, profile, done) => {
     try {
       // Check if a user with this GitHub ID already exists
-      let user = await User.findOne({ githubId: profile.id });
+      let user = await User.findOne({ githubId: profile.id }).exec();
       if (!user) {
         // Check if a user with the same email already exists
-        user = await User.findOne({ email: profile.emails[0].value });
+        user = await User.findOne({ email: profile.emails[0].value }).exec();
         if (user) {
           // If a user exists, link their GitHub ID and save
           user.githubId = profile.id;
@@ -27,7 +27,6 @@ module.exports = new GitHubStrategy(
           });
         }
       }
-
       // Pass the user to Passport
       done(null, user);
     } catch (error) {

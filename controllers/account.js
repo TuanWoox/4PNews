@@ -38,6 +38,7 @@ module.exports.createLocalUser = async (req,res,next) => {
         gender
     });
     const registeredUser = await User.register(user,rawPassword);
+    console.log(registeredUser);
     req.login(registeredUser, err => {
         if(err) return next(err)
         req.flash('success',"Bạn đã đăng kí thành công")

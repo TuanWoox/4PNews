@@ -8,9 +8,9 @@ module.exports = new GoogleStrategy(
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
-      let user = await User.findOne({ googleId: profile.id });
+      let user = await User.findOne({ googleId: profile.id }).exec();
       if (!user) {
-        user = await User.findOne({ email: profile.emails[0].value });
+        user = await User.findOne({ email: profile.emails[0].value }).exec();
         if (user) {
           user.googleId = profile.id;
           await user.save();
@@ -22,7 +22,6 @@ module.exports = new GoogleStrategy(
           });
         }
       }
-
       done(null, user);
     } catch (error) {
       done(error);

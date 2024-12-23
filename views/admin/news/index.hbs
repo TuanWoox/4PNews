@@ -37,12 +37,20 @@
                     {{#if (eq status 'published')}}
                        Đã xuất bản                     
                     {{/if}}
+                    {{#if (eq status 'approved')}}
+                       Đã duyệt                    
+                    {{/if}}
+                    {{#if (eq status 'rejected')}}
+                       Đã từ chối                   
+                    {{/if}}
                     {{#if (eq status 'all')}}
                        Tất cả                     
                     {{/if}}
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                     <li><a class="dropdown-item" href="?category={{category}}&status=draft">Chưa duyệt cho xuất bản</a></li>
+                    <li><a class="dropdown-item" href="?category={{category}}&status=rejected">Đã từ chối</a></li>
+                    <li><a class="dropdown-item" href="?category={{category}}&status=approved">Đã duyệt</a></li>
                     <li><a class="dropdown-item" href="?category={{category}}&status=published">Đã xuất bản</a></li>
                 </ul>
             </div>
@@ -83,21 +91,19 @@
                             <a href="#" class="status text-danger">Bị từ chối</a>
                             {{/if}}
                             {{#if (eq status 'published')}}
-                            {{#if (isLessThanDateNow publish.publishedDate)}}
                             <a href="#" class="status text-success">
                                 Đã được xuất bản
                                 <br>
                                 Đã xuất bản vào {{convertToDisplayPublishedDate publish.publishedDate}}
                             </a>
-                            {{else}}
+                            {{/if}}
+                            {{#if (eq status 'approved')}}
                             <a href="#" class="status text-info">
                                 Đã được phê duyệt
                                 <br>
                                 Sẽ xuất bản vào {{convertToDisplayPublishedDate publish.publishedDate}}
                             </a>
                             {{/if}}
-                            {{/if}}
-
                         </h5>
                     </div>
                 </div>

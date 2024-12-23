@@ -79,11 +79,15 @@ router.route('/users')
 .get(isLoggedIn,isAdmin,adminController.renderUserIndex);
 
 router.route('/users/:userId')
-.patch(isLoggedIn,isAdmin,adminController.editUser);
+.patch(isLoggedIn,isAdmin,adminController.editUser)
+.delete(isLoggedIn,isAdmin,adminController.deleteUser)
 
 router.route('/users/:userId/edit')
 .get(isLoggedIn,isAdmin,adminController.renderUserEditForm);
 
+router.route('/createUser')
+.get(isLoggedIn,isAdmin,adminController.renderCreateUserForm)
+.post(isLoggedIn,isAdmin,adminController.createUser)
 //Premium routes
 router.route('/premiums')
 .get(isLoggedIn,isAdmin,adminController.renderPremiumIndex);

@@ -39,16 +39,19 @@ module.exports.renderHome = async (req, res) => {
         .populate('category', '_id name')
         .populate('tags', '_id name');
 
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 8);
+
     const listHotNews = await News.find({
         status: 'published',
-        "publish.publishedDate": { $lt: new Date() },
+        "publish.publishedDate": { $gte: sevenDaysAgo, $lt: new Date() }
     })
-        .sort({ 'publish.publishedDate': -1 })
-        .sort({ views: -1 })
+        .sort({ views: -1})
         .limit(4)
         .populate('author', '_id bio penName profilePic')
         .populate('category', '_id name')
         .populate('tags', '_id name');
+        
     
     const topSubCategories = await News.aggregate([
         { $match: { category: { $ne: null } } },
@@ -186,7 +189,7 @@ module.exports.renderFindByTag = async (req, res) => {
         "publish.publishedDate": { $lt: new Date() },
         tags: tagid
     })
-        .sort({ 'publish.publishedDate': -1 })
+        .sort({isPremium: -1, 'publish.publishedDate': -1 })
         .skip(offset) 
         .limit(limit) 
         .populate('author', '_id bio penName profilePic')
@@ -246,7 +249,7 @@ module.exports.renderFindBySubCate = async (req,res) => {
         "publish.publishedDate": { $lt: new Date() },
         category: subCateId
     })
-    .sort({ 'publish.publishedDate': -1 })
+    .sort({isPremium: -1, 'publish.publishedDate': -1 })
     .skip(offset) 
     .limit(limit) 
     .populate('author', '_id bio penName profilePic')
@@ -302,11 +305,12 @@ module.exports.searchNews = async (req, res) => {
         }
     }
     
-    let sortCondition = { score: { $meta: 'textScore' } };
+    // Sort condition with premium prioritization
+    let sortCondition = { isPremium: -1, score: { $meta: 'textScore' } };
     if (sort === 'newest') {
-        sortCondition = { "publish.publishedDate": -1 };
+        sortCondition = { isPremium: -1, "publish.publishedDate": -1 };
     } else if (sort === 'popular') {
-        sortCondition = { views: -1 }; 
+        sortCondition = { isPremium: -1, views: -1 }; 
     }
 
     const limit = 5;

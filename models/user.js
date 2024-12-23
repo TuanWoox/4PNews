@@ -85,8 +85,4 @@ const userSchema = new Schema({
 
 //This will implmement username and password for them
 userSchema.plugin(passportLocalMongoose);
-
-
-
-
 module.exports = mongoose.model('User', userSchema);

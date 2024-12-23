@@ -11,6 +11,9 @@
                 {{#if (eq news.status 'draft')}}
                    <div class="card-text text-muted text-end">Trạng thái: Đang chờ duyệt</div>
                 {{/if}}
+                {{#if (eq news.status 'rejected')}}
+                   <div class="card-text text-danger">Đã bị từ chối</div>
+                {{/if}}
                 
             </div>
         </div>
@@ -68,12 +71,10 @@
                     Xuất bản ngay
                 </button>
                 </form>
-            {{/if}}
-           
+            <a href="/admin/news/{{news._id}}/rejectNews" class="btn btn-outline-danger me-3">Từ chối</a>
+            {{/if}} 
         </div>
         <hr>
     </div>
-
-
     <div class="right-body"></div>
 </div>
