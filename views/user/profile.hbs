@@ -1,132 +1,171 @@
-    <!-- body -->
-    <div class="row my-5">
-      <div class="col-1"></div>
-      <!-- avatar -->
-      <div class="col-4">
-        <div id="avatar" class="border-bottom border-3 border-muted">
+<!-- body -->
+<div class="row my-5">
+  <div class="col-1"></div>
+  <!-- avatar -->
+  <div class="col-4">
+    <div id="avatar" class="border-bottom border-3 border-muted">
 
-          <img
-           {{#if user.profilePic.url}}
-             src = "{{user.profilePic.url}}"
-          {{else}}
-             src = "/images/user.png"
-          {{/if}}
-            alt="avatar"
-            class="rounded-circle mb-3"
-            id="avatarDisplay"
-            style="width: 200px; height: 200px; object-fit: cover; border: 5px solid red"
-          />
-          <label for="" class="fs-2 my-3">
-            TuanWoox
-            {{#if user.premium.isPremium}}
-                <br>
-                <span class="badge bg-warning text-dark my-3">Premium User</span>
-                {{#if eq currentUser._id user._id}}
-                  <span>Hết hạn vào:</span>
-                {{/if}}
-            {{/if}}
-        
-          </label>
-          <br>
-          <!-- Add Premium Label Below -->
-          
+      <img {{#if user.profilePic.url}} src="{{user.profilePic.url}}" {{else}} src="/images/user.png" {{/if}}
+        alt="avatar" class="rounded-circle mb-3" id="avatarDisplay"
+        style="width: 200px; height: 200px; object-fit: cover; border: 5px solid red" />
+      <label for="" class="fs-2 my-3">
+        {{#if (eq user.role "user")}}
+        <!-- Add Premium Label Below -->
+        {{#if user.premium}}
+        {{#if (isPremiumStillValid user.premium)}}
+        <br>
+        <span class="badge bg-warning text-dark my-3">Premium User</span>
+        {{#if currentUser}}
+        {{#if (eq currentUser._id user._id)}}
+        <span>Hết hạn vào: {{convertToDate user.premium}}</span>
+        {{/if}}
+        {{/if}}
+        {{/if}}
+        {{/if}}
+        {{/if}}
 
-        </div>
-          {{#if currentUser}}
-             {{#if (eq currentUser._id user._id)}}
-            <div class="d-grid gap-3 my-5">
-              <a href="/account/changePassword" class="btn btn-outline-primary">
-                Đổi mật khẩu
-              </a>
-              <a href="" class="btn btn-outline-info">
-                Mua premium
-              </a>
-              <a href="/account/logOut" class="btn btn-outline-danger">
-                Đăng xuất
-              </a>            
-            </div>
-            {{/if}}
-          {{/if}}
-      </div>
-      <!-- thông tin -->
-      <div class="col-7 border-start border-3 border-muted">
-  
-        <h5>
-          THÔNG TIN CÁ NHÂN
-          {{#if currentUser}}
-             {{#if (eq currentUser._id user._id)}}
-              <a href="/user/{{user._id}}/editProfile"><i class="bi bi-pencil-square text-primary mx-2"></i></a>
-            {{/if}}
-          {{/if}}
-          
-         
-        </h5>
+        {{#if (eq user.role "writer")}}
+        <!-- Writer Badge and Specific Information -->
+        <br>
+        <span class="badge bg-info text-white my-3">Writer</span>
+        <p>Người dùng này có quyền viết bài và gửi để biên tập.</p>
+        {{/if}}
 
-        <div class="mb-3">
-          <label for="userName" class="form-label mx-3">Họ và tên</label>
-          <input
-            type="text"
-            class="form-control w-75"
-            id="userName"
-            value="{{user.fullName}}"
-            readonly
-          />
-        </div>
-        <div class="mb-3">
-          <label for="Email" class="form-label mx-3">Email</label>
-          <input
-            type="text"
-            class="form-control w-75"
-            id="Email"
-            value="{{user.email}}"
-            readonly
-          />
-        </div>
-        <div class="mb-3">
-          <label for="birthdate" class="form-label mx-3">Ngày sinh</label>
-          <input
-            type="text"
-            class="form-control w-75"
-            id="birthdate"
-            value="{{formattedDateOfBirth}}"
-            readonly
-          />
-        </div>
-        <div class="mb-3">
-        <label for="gender" class="form-label mx-3">Giới tính</label>
-        <input
-          type="text"
-          class="form-control w-75"
-          id="gender"
-          value="{{#if (eq user.gender 'male')}}Nam{{else if (eq user.gender 'female')}}Nữ{{else}}''{{/if}}"
-          readonly
-        />
-      </div>
-        <div class="mb-3">
-          <label for="address" class="form-label mx-3">Địa chỉ</label>
-          <input
-            type="text"
-            class="form-control w-75"
-            id="address"
-            placeholder="Chưa có địa chỉ"
-            value="{{user.adress}}"
-            readonly
-          />
-        </div>
-        <div class="mb-3">
-          <label for="address" class="form-label mx-3">Điện thoại</label>
-          <input
-            type="text"
-            class="form-control w-75"
-            id="address"
-            placeholder="Chưa có số điện thoại"
-            value="{{user.phoneNumber}}"
-            name="user[phoneNumber]"
-            readonly
-          />
-        </div>
-      </div>
+        {{#if (eq user.role "editor")}}
+        <!-- Editor Badge and Specific Information -->
+        <br>
+        <span class="badge bg-primary text-white my-3">Editor</span>
+        {{#if user.managedSubCate}}
+        <span>Chuyên mục quản lí: {{user.managedSubCate.belongTo.name}}</span>
+        <br>
+        <span>Chuyên mục cấp 2: {{user.managedSubCate.name}}</span>
+        {{else}}
+        <span>Chưa được phân công chuyên mục</span>
+        {{/if}}
+        {{/if}}
+
+        {{#if (eq user.role "admin")}}
+        <!-- Admin Badge and Specific Information -->
+        <br>
+        <span class="badge bg-success text-white my-3">Administrator</span>
+        <p>Người dùng này có quyền quản trị toàn bộ hệ thống.</p>
+        {{/if}}
+
+      </label>
+      <br>
+
+
     </div>
+    {{#if currentUser}}
+    {{#if (eq currentUser._id user._id)}}
+    {{#if (eq user.role "user")}}
+    <div class="d-grid gap-3 my-5">
+      <a href="/user/{{currentUser._id}}/buyPremium" class="btn btn-outline-info" id="buyPremium">
+        Mua premium
+      </a>
+      <a href="/user/{{currentUser._id}}/premiumBillHistory" class="btn btn-outline-success" id="buyPremium">
+        Lịch sử mua premium
+      </a>
+    </div>
+    {{/if}}
+    <div class="d-grid gap-3 my-5">
+      <a href="/account/changePassword" class="btn btn-outline-primary">
+        Đổi mật khẩu
+      </a>
+      <a href="/account/logOut" class="btn btn-outline-danger">
+        Đăng xuất
+      </a>
+    </div>
+    {{/if}}
+    {{/if}}
+  </div>
+  <!-- thông tin -->
+  <div class="col-7 border-start border-3 border-muted">
+
+    <h5>
+      THÔNG TIN CÁ NHÂN
+      {{#if currentUser}}
+      {{#if (eq currentUser._id user._id)}}
+      <a href="/user/{{user._id}}/editProfile"><i class="bi bi-pencil-square text-primary mx-2"></i></a>
+      {{/if}}
+      {{/if}}
 
 
-    
+    </h5>
+
+    <div class="mb-3">
+      <label for="userName" class="form-label mx-3">Họ và tên</label>
+      <input type="text" class="form-control w-75" id="userName" value="{{user.fullName}}" readonly />
+    </div>
+    <div class="mb-3">
+      <label for="Email" class="form-label mx-3">Email</label>
+      <input type="text" class="form-control w-75" id="Email" value="{{user.email}}" readonly />
+    </div>
+    <div class="mb-3">
+      <label for="birthdate" class="form-label mx-3">Ngày sinh</label>
+      <input type="text" class="form-control w-75" id="birthdate" value="{{formattedDateOfBirth}}" readonly />
+    </div>
+    <div class="mb-3">
+      <label for="gender" class="form-label mx-3">Giới tính</label>
+      <input type="text" class="form-control w-75" id="gender"
+        value="{{#if (eq user.gender 'male')}}Nam{{else if (eq user.gender 'female')}}Nữ{{else}}''{{/if}}" readonly />
+    </div>
+    <div class="mb-3">
+      <label for="address" class="form-label mx-3">Địa chỉ</label>
+      <input type="text" class="form-control w-75" id="address" placeholder="Chưa có địa chỉ" value="{{user.adress}}"
+        readonly />
+    </div>
+    <div class="mb-3">
+      <label for="address" class="form-label mx-3">Điện thoại</label>
+      <input type="text" class="form-control w-75" id="address" placeholder="Chưa có số điện thoại"
+        value="{{user.phoneNumber}}" name="user[phoneNumber]" readonly />
+    </div>
+    {{#if (eq user.role "writer")}}
+    <div class="mb-3">
+      <label for="penName" class="form-label mx-3">Bút danh</label>
+      <input type="text" class="form-control w-75" id="penName" value="{{user.penName}}" placeholder="" readonly>
+    </div>
+    <div class="mb-3">
+      <label for="bio" class="form-label mx-3">Tiểu sử</label>
+      <textarea class="form-control w-75" id="txtBio" rows="5" placeholder="Nhập tiểu sử của tác giả tại đây"
+        name="writer[bio]" readonly>{{user.bio}}</textarea>
+    </div>
+    {{/if}}
+  </div>
+</div>
+{{#section 'js'}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  const buyerId = "{{currentUser._id}}"; // Ensure currentUser._id is wrapped in quotes
+  if (buyerId !== "") { // Check if buyerId is defined
+    const premiumButtonElement = document.querySelector('#buyPremium');
+    premiumButtonElement.addEventListener('click', async (evt) => {
+      evt.preventDefault(); // Prevent the default action
+      try {
+        const response = await fetch(`/api/isBuyPremiumAvailable?buyerId=${buyerId}`);
+        const result = await response.json();
+
+        if (result === true) {
+          // Continue with the intended action
+          window.location.href = `/user/${buyerId}/buyPremium`; // Example: Redirecting to buy premium page
+        } else {
+          // Show SweetAlert notification
+          Swal.fire({
+            icon: 'error',
+            title: 'Không thể mua Premium',
+            text: 'Bạn hiện đang có 1 đơn premium chờ được duyệt, vui lòng quay lại sau',
+          });
+        }
+      } catch (error) {
+        console.error('Error checking premium availability:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi hệ thống',
+          text: 'Đã xảy ra lỗi, vui lòng thử lại sau!',
+        });
+      }
+    });
+  }
+</script>
+
+{{/section}}

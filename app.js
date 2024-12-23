@@ -118,7 +118,7 @@ app.engine('hbs', engine({
     },
     isStillPremiumUser(value){
       const now = new Date();
-      return value.role === 'user' && new Date(endDate) > now;
+      return value.role === 'user' && new Date(value) > now;
     },
     add(a,b){
       return a+b;
@@ -180,13 +180,19 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-//This is used for google login
+passport.serializeUser((user, done) => {
+  done(null, user); // Save user 
+});
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id._id);
+    done(null, user); // Attach user object to `req.user`
+  } catch (err) {
+    done(err, null);
+  }
+});
 passport.use('google',passportGoogle);
-//This isued for github login
 passport.use('github',passportGithub)
-
 
 //Routes imports
 const generalRoutes = require('./routes/general');

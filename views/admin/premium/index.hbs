@@ -1,0 +1,120 @@
+<div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-between align-items-center body">
+        <div class="logo me-3">
+            Người Dùng
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                {{#if (eq status 'wait')}}
+                   Chưa duyệt 
+                {{/if}}
+                {{#if (eq status 'approved')}}
+                   Đã duyệt 
+                {{/if}}
+                {{#if (eq status 'rejected')}}
+                   Đã từ chối 
+                {{/if}}
+                {{#if (eq status 'all')}}
+                   Tất cả
+                {{/if}}
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="?status=wait">Chưa duyệt</a></li>
+                <li><a class="dropdown-item" href="?status=approved">Đã duyệt</a></li>
+                <li><a class="dropdown-item" href="?status=rejected">Đã từ chối</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="d-flex justify-content-center mb-3">
+    <div id="sub-nav-bot"></div>
+</div>
+{{#if premiumBills}}
+<div class="d-flex justify-content-center">
+    <div class="body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Tên người dùng</th>
+                    <th>Email đăng ký</th>
+                    <th>Gửi đơn vào lúc</th>
+                    <th>Tình trạng</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each premiumBills}}
+                <tr>
+                    <td scope="row">{{@index}}</td>
+                    <td>{{buyerId.fullName}}</td>
+                    <td>{{buyerId.email}}</td>
+                    <td>{{convertToDisplayDate this}}</td>
+                    <td>
+                        {{#if (eq status 'wait')}}
+                        <span class="text-info">Đang chờ</span>
+                        {{/if}}
+                        {{#if (eq status 'rejected')}}
+                         <span class="text-danger">Đã từ chối</span>
+                        {{/if}}
+                        {{#if (eq status 'approved')}}
+                        <span class="text-success">Đã duyệt</span>
+                        {{/if}}
+                    </td>
+                    {{#if (eq status 'wait')}}
+                    <td class="text-end">
+                        <a href="/admin/approvePremium/{{_id}}" class="btn btn-sm btn-outline-primary" role="button">
+                            <i class="bi bi-pencil-square"></i>
+                            Duyệt
+                        </a>
+                        <a href="/admin/rejectPremium/{{_id}}" class="btn btn-sm btn-outline-danger" role="button">
+                            <i class="bi bi-x-square"></i>
+                            Từ chối
+                        </a>
+                    </td>
+                    {{/if}}
+
+                </tr>
+                {{/each}}
+
+            </tbody>
+        </table>
+    </div>
+</div>
+{{else}}
+<div class="text-center py-3">
+    <img src="/images/empty-state-image1.png" alt="No items found" class="img-fluid mb-3" style="max-width: 300px;">
+    <h4>Chưa có hóa đơn mua premium nào cả</h4>
+    <p class="text-muted">Hãy quay lại sau</p>
+</div>
+{{/if}}
+{{#if premiumBills}}
+<!-- Pagination Section -->
+<div class="btn_change_page d-flex justify-content-center align-items-center">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <!-- Previous Button -->
+            <li class="page-item {{#if (eq currentPage 1)}}disabled{{/if}}">
+                <a class="page-link" href="?status={{../status}}&page={{subtract currentPage 1}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <!-- Page Numbers -->
+            {{#each (range 1 totalPages)}}
+            <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+                <a class="page-link" href="?status={{../status}}&page={{this}}">{{this}}</a>
+            </li>
+            {{/each}}
+
+            <!-- Next Button -->
+            <li class="page-item {{#if (eq currentPage totalPages)}}disabled{{/if}}">
+                <a class="page-link" href="?status={{../status}}&page={{add currentPage 1}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+{{/if}}

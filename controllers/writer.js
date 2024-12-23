@@ -64,7 +64,7 @@ module.exports.editProfile = async (req,res) => {
         
     }
     req.flash('success', 'Cập nhật thông tin thành công')
-    res.redirect(`/writer/${req.params.id}/profile`);
+    res.redirect(`/user/${req.params.id}/profile`);
 }
 module.exports.renderWriterNewsForm = async (req, res) => {
     const { status = 'all', page = 1 } = req.query; // Default to 'all' for status, and page 1 if not specified

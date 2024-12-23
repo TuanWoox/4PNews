@@ -1,0 +1,149 @@
+{{#section 'css'}}
+<link rel="stylesheet" href="/stylesheets/SignIn.css">
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+{{/section}}
+<div class="d-flex justify-content-between align-items-center">
+    <div class="left-body"></div>
+
+    <div class="body">
+        <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+            <form action="" method="post" id="signUpForm">
+                <p class="text-center title">Đăng ký</p>
+                <div class="d-flex justify-content-center mb-3">
+                    <div class="sub-body">
+                        <!-- Họ tên -->
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingInput" placeholder=""
+                                name="user[fullName]" required>
+                            <label for="floatingInput">Họ tên</label>
+                        </div>
+
+                        <!-- Ngày tháng năm sinh -->
+                        <div class="form-floating mb-3">
+                            <input type="text" name="user[rawDob]" id="txtDOB" class="form-control" placeholder=""
+                                required>
+                            <label for="txtDOB">Ngày tháng năm sinh</label>
+                        </div>
+
+                        <!-- Giới tính -->
+                        <div class="form-floating mb-3">
+                            <p><label for="gender">Giới tính</label></p>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="user[gender]" value="male" id="male" class="form-check-input"
+                                    required>
+                                <label class="form-check-label" for="male">Nam</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="user[gender]" value="female" id="female"
+                                    class="form-check-input" required>
+                                <label class="form-check-label" for="female">Nữ</label>
+                            </div>
+                        </div>
+
+                        <!-- Email input -->
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" placeholder="name@example.com"
+                                name="user[email]" required>
+                            <label for="floatingInput">Email</label>
+                        </div>
+
+                        <!-- Username -->
+                        <div class="form-floating mb-3">
+                            <input type="name" class="form-control" id="username" placeholder="" name="user[username]"
+                                required>
+                            <label for="floatingInput">Tài khoản</label>
+                        </div>
+                        <!-- Role dropdown -->
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="floatingRole" name="user[role]" required>
+                                <option value="" selected disabled>Chọn vai trò</option>
+                                <option value="user">User</option>
+                                <option value="editor">Editor</option>
+                                <option value="writer">Writer</option>
+                            </select>
+                            <label for="floatingRole">Vai trò</label>
+                        </div>
+                        <!-- Password input -->
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
+                                name="user[rawPassword]" required>
+                            <label for="floatingPassword">Mật khẩu</label>
+                        </div>
+                        <!-- Xác nhận mật khẩu -->
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="floatingPasswordConfirm"
+                                placeholder="Password" required>
+                            <label for="floatingPasswordConfirm">Xác nhận mật khẩu</label>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <!-- Checkbox -->
+                            <button type="submit" class="btn btn-primary">Tạo người dùng</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <a href="/admin/users" class="btn btn-outline-primary">Quay lại</a>
+        </div>
+    </div>
+    <div class="right-body"></div>
+</div>
+{{#section 'js'}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+<script>
+    jQuery('#txtDOB').datetimepicker({
+        timepicker: false,
+        format: 'd/m/Y',
+        mask: true,
+    });
+
+    // Form validation
+    document.getElementById('signUpForm').addEventListener('submit', async function (event) {
+        event.preventDefault(); // Prevent form submission to check validation
+        let response;
+        let result;
+        const usernameValue = document.querySelector('#username').value;
+        console.log(usernameValue);
+        response = await fetch('/api/isAccountAvailable?username=' + usernameValue);
+        result = await response.json();
+        console.log(result);
+        if (result === false) {
+            Swal.fire('Lỗi', 'Tài khoản đã có người đăng kí', 'error');
+            return;
+        }
+        const emailValue = document.querySelector('#email').value;
+        console.log(emailValue);
+        response = await fetch('/api/isEmailAvailable?email=' + emailValue);
+        result = await response.json();
+        console.log(result);
+        if (result === false) {
+            Swal.fire('Lỗi', 'Email đã có người đăng kí', 'error');
+            return;
+        }
+        // Get form values
+        const dob = document.getElementById('txtDOB').value;
+        const email = document.querySelector('[name="user[email]"]').value;
+        const password = document.querySelector('[name="user[rawPassword]"]').value;
+        const passwordConfirm = document.getElementById('floatingPasswordConfirm').value;
+
+        // Check for age (must be 14 or older)
+        const dobDate = new Date(dob.split('/').reverse().join('-')); // Convert to YYYY-MM-DD
+        const age = new Date().getFullYear() - dobDate.getFullYear();
+        if (age < 14) {
+            Swal.fire('Lỗi', 'Bạn phải ít nhất 14 tuổi để đăng ký.', 'error');
+            return;
+        }
+        // Check if passwords match
+        if (password !== passwordConfirm) {
+            Swal.fire('Lỗi', 'Mật khẩu không khớp.', 'error');
+            return;
+        }
+
+
+        // If all validations pass, submit the form
+        this.submit();
+    });
+</script>
+{{/section}}

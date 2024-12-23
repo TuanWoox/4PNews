@@ -62,6 +62,9 @@ module.exports.isAdmin = async (req,res,next) => {
     next();
 }
 module.exports.premiumNews = async (req,res,next) => {
+    const news = await News.findById(req.params.newsId);
+    if(news.isPremium)
+    {
     if(!req.isAuthenticated())
     {
             req.session.returnTo = req.originalUrl; 
@@ -70,12 +73,14 @@ module.exports.premiumNews = async (req,res,next) => {
     } else {
         let now = new Date();
         const news = await News.findById(req.params.newsId);
-        if(req.user.premium < now && news.isPremium) 
+        console.log(news);
+        if(req.user.role === "user" && req.user.premium && req.user.premium < now && news.isPremium ) 
         {
                 req.session.returnTo = req.originalUrl; 
                 req.flash('error','Bạn chưa gia hạn premium');
                 return res.redirect('/');
         } 
+    }
     }
     next();
 }

@@ -47,27 +47,29 @@
         </div>
         <div></div>
     </div>
-
-<!-- News Carousel for "Tin mới nhất" -->
-<div class="news-carousel-container d-flex align-items-center justify-content-between" id="carousel-newest">
+<div class="news-carousel-container" id="carousel-newest">
     <!-- Previous button -->
     <button class="btn btn-outline-primary btn-prev">
         <i class="bi bi-arrow-left"></i>
     </button>
 
-    <!-- News Carousel -->
-    <div class="news-carousel overflow-hidden">
-        <div class="d-flex news-track">
+    <!-- News Track -->
+    <div class="news-carousel d-flex justify-content-center overflow-hidden">
+        <div class="news-track">
             {{#each listNews}}
-                <div class="news-item flex-shrink-0" style="width: 25%;">
-                    <div class="card-header">
-                        <a href="/category/{{category._id}}" class="text-decoration-none"><h4 class="nav-link ps-0">{{category.name}}</h4></a>
-                    </div>
+                <div class="news-item" >
                     <div class="card h-100">
-                        <img src="{{thumbnail}}" class="card-img-top" alt="...">
+                        <div class="card-header">
+                            <a class="text-decoration-none" href="/category/{{category._id}}">
+                                <h4 class="nav-link ps-0">{{category.name}}</h4>
+                            </a>
+                        </div>
+                        <img src="{{thumbnail}}" class="card-img-top" alt="{{title}}">
                         <div class="card-body">
-                            <a href="/detail/{{_id}}" class="nav-link ps-0">{{title}}</a>
-                            <p class="card-title">{{brief}}</p>
+                            <a class="text-decoration-none" href="/detail/{{_id}}">
+                                <h5 class="nav-link ps-0 text-decoration-none">{{title}}</h5>
+                            </a>
+                            <p class="card-text">{{brief}}</p>
                         </div>
                         <div class="card-footer">
                             <small class="text-muted">Last updated {{timesince publish.publishedDate}}</small>
@@ -86,18 +88,15 @@
 
 <br>
 
-<div class="d-flex justify-content-between">
-        <div></div>
-        <div class="d-flex  align-items-center" id="sub-nav">
-            <div class="logo px-3">
-                Tin nổi bật
-            </div>
+<div class="d-flex justify-content-center">
+    <div class="d-flex align-items-center" id="sub-nav">
+        <div class="logo px-3">
+            Tin nổi bật
         </div>
-        <div></div>
     </div>
+</div>
 
-<!-- News Carousel for "Tin nổi bật" -->
-<div class="news-carousel-container d-flex align-items-center justify-content-between" id="carousel-hot">
+<div class="news-carousel-container d-flex justify-content-center align-items-center" id="carousel-hot">
     <!-- Previous button -->
     <button class="btn btn-outline-primary btn-prev">
         <i class="bi bi-arrow-left"></i>
@@ -107,15 +106,19 @@
     <div class="news-carousel overflow-hidden">
         <div class="d-flex news-track">
             {{#each topHotNews}}
-                <div class="news-item">
-                    <div class="card-header">
-                        <a href="/category/{{category._id}}" class="text-decoration-none"><h4 class="nav-link ps-0">{{category.name}}</h4></a>
-                    </div>
+                <div class="news-item" >
                     <div class="card h-100">
-                        <img src="{{thumbnail}}" class="card-img-top" alt="...">
+                        <div class="card-header">
+                            <a class="text-decoration-none" href="/category/{{category._id}}">
+                                <h4 class="nav-link ps-0">{{category.name}}</h4>
+                            </a>
+                        </div>
+                        <img src="{{thumbnail}}" class="card-img-top" alt="{{title}}">
                         <div class="card-body">
-                            <a href="/detail/{{_id}}" class="nav-link ps-0">{{title}}</a>
-                            <p class="card-title">{{brief}}</p>
+                            <a class="text-decoration-none" href="/detail/{{_id}}">
+                                <h5 class="nav-link ps-0 text-decoration-none">{{title}}</h5>
+                            </a>
+                            <p class="card-text">{{brief}}</p>
                         </div>
                         <div class="card-footer">
                             <small class="text-muted">Last updated {{timesince publish.publishedDate}}</small>
@@ -134,18 +137,15 @@
 
 
 <br>
-
-<div class="d-flex justify-content-between">
-    <div></div>
-    <div class="d-flex  align-items-center" id="sub-nav">
-        <div class="logo px-3">            
+<div class="d-flex justify-content-center">
+    <div class="d-flex align-items-center" id="sub-nav">
+        <div class="logo px-3">
             Top chuyên mục
         </div>
     </div>
-    <div></div>
 </div>
 
-<div class="news-carousel-container d-flex align-items-center justify-content-between" id="carousel-hot-cate">
+<div class="news-carousel-container d-flex justify-content-center align-items-center" id="carousel-hot-cate">
     <!-- Previous button -->
     <button class="btn btn-outline-primary btn-prev">
         <i class="bi bi-arrow-left"></i>
@@ -155,8 +155,7 @@
     <div class="news-carousel overflow-hidden">
         <div class="d-flex news-track">
             {{#each topSubCategoriesWithNews}}
-                {{#if news}}
-                    <div class="news-item flex-shrink-0" style="width: 25%; box-sizing: border-box; padding: 10px;">
+                    <div class="news-item" >
                         <div class="card h-100">
                             <div class="card-header">
                                 <a class="text-decoration-none" href="/category/{{_id}}">
@@ -175,7 +174,6 @@
                             </div>
                         </div>
                     </div>
-                {{/if}}
             {{/each}}
         </div>
     </div>
@@ -198,57 +196,59 @@
         const visibleCount = 4; // Number of visible items
         const totalItems = items.length;
 
-        let currentIndex = 0; // Keeps track of the starting position of visible items
+        let currentIndex = 0; // Keeps track of the starting position
         let isAnimating = false; // Prevent rapid clicking
 
-        function updateCarousel(animate = true) {
-            const totalVisibleItems = visibleCount; // Visible items = 4
-            const totalBufferItems = 4; // Add 2 buffer items for smooth scroll
-            const totalNeededItems = totalVisibleItems + totalBufferItems;
+        if (totalItems === 0) {
+            console.error(`Carousel "${carouselId}" has no items to display.`);
+            return; // Stop if no items are present
+        }
 
-            if (animate) {
-                track.classList.add("animate");
-            } else {
-                track.classList.remove("animate");
-            }
+        function updateCarousel() {
+            // Clear existing content
+            track.innerHTML = "";
 
-            // Ensure the track always shows the correct number of items
-            track.innerHTML = ""; // Clear existing items
-            for (let i = 0; i < totalNeededItems; i++) {
-                const index = (currentIndex + i - 1 + totalItems) % totalItems; // Circular index
+            // Add only visible items
+            for (let i = 0; i < visibleCount; i++) {
+                const index = (currentIndex + i) % totalItems; // Circular index
                 const clonedItem = items[index].cloneNode(true);
                 track.appendChild(clonedItem);
             }
 
+            // Reset transform for smooth scrolling
+            track.style.transition = "none";
+            track.style.transform = `translateX(0)`;
         }
+
+
         function handleNavigation(direction) {
             if (isAnimating) return; // Prevent rapid clicks
             isAnimating = true;
 
-            if (direction === "next") {
-                currentIndex = (currentIndex + 1) % totalItems;
-                track.style.transform = "translateX(-50%)"; // Move next
-            } else {
-                currentIndex = (currentIndex - 1 + totalItems) % totalItems;
-                track.style.transform = "translateX(0%)"; // Move previous
-            }
+            const moveAmount = direction === "next" ? -100 : 100;
+            track.style.transition = "transform 0.3s ease-in-out";
+            track.style.transform = `translateX(calc(-${100 / (visibleCount + 1)}% + ${moveAmount}%))`;
 
-            // Wait for transition to finish, then reset
             setTimeout(() => {
-                updateCarousel(false);
+                // Update current index and reset position
+                currentIndex = (currentIndex + (direction === "next" ? 1 : -1) + totalItems) % totalItems;
+                updateCarousel();
                 isAnimating = false;
-            }, 300); // Match the CSS transition time
+            }, 300); // Match CSS transition duration
         }
 
-        nextBtn.addEventListener("click", () => handleNavigation("next"));
-        prevBtn.addEventListener("click", () => handleNavigation("prev"));
+        nextBtn?.addEventListener("click", () => handleNavigation("next"));
+        prevBtn?.addEventListener("click", () => handleNavigation("prev"));
 
         // Initialize the carousel display
-        updateCarousel(false);
+        updateCarousel();
     }
-    initCarousel("carousel-newest");
-    initCarousel("carousel-hot");
-    initCarousel("carousel-hot-cate")
 
+    // Initialize all carousels
+    document.querySelectorAll(".news-carousel-container").forEach((carousel) => {
+        const id = carousel.id;
+        initCarousel(id);
+    });
 </script>
+
 {{/section}}
