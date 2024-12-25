@@ -163,7 +163,7 @@ app.use(session({
     store,
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
       name: 'eduSocialCookie',
       httpOnly: true,
