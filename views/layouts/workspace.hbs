@@ -12,24 +12,24 @@
   <!-- css -->
   <link rel="icon" href="/images/icon.png">
   <link rel="stylesheet" href="/stylesheets/infor_user.css" />
-  <link rel="stylesheet" href="/stylesheets/home.css">
+  <link rel="stylesheet" href="/stylesheets/Home.css">
   {{#if (eq currentUser.role "admin")}}
   <link rel="stylesheet" href="/stylesheets/admin/Admin.css" />
   {{/if}}
   {{{_sections.css}}}
-  <title>Workspace: 
+  <title>Workspace:
     {{#if (eq currentUser.role "editor")}}
-          EDITOR
-          {{/if}}
-          {{#if (eq currentUser.role "admin")}}
-          ADMIN
-          {{/if}}
-          {{#if (eq currentUser.role "writer")}}
-          WRITER
-          {{/if}}
-          {{#if (eq currentUser.role "user")}}
-          WRITER
-          {{/if}}
+    EDITOR
+    {{/if}}
+    {{#if (eq currentUser.role "admin")}}
+    ADMIN
+    {{/if}}
+    {{#if (eq currentUser.role "writer")}}
+    WRITER
+    {{/if}}
+    {{#if (eq currentUser.role "user")}}
+    WRITER
+    {{/if}}
   </title>
 </head>
 
@@ -78,28 +78,20 @@
         <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-3" aria-labelledby="userDropdown">
 
           <!-- User Role-specific Links -->
-          {{#if (eq currentUser.role "user")}}
-          <li><a class="dropdown-item" href="/user/{{currentUser._id}}/profile"><i class="bi bi-person"></i>
-              Hồ sơ cá nhân</a></li>
-          {{/if}}
+          <li><a class="dropdown-item" href="/user/{{currentUser._id}}/profile"><i class="bi bi-person"></i>Hồ sơ cá
+              nhân</a></li>
 
           {{#if (eq currentUser.role "writer")}}
-          <li><a class="dropdown-item" href="/writer/{{currentUser._id}}/profile"><i class="bi bi-person"></i>
-              Hồ sơ cá nhân</a></li>
           <li><a class="dropdown-item" href="/writer/{{currentUser._id}}/writerNews"><i class="bi bi-briefcase"></i>
               Không gian làm việc</a></li>
           {{/if}}
 
           {{#if (eq currentUser.role "editor")}}
-          <li><a class="dropdown-item" href="/editor/{{currentUser._id}}/profile"><i class="bi bi-person"></i>
-              Hồ sơ cá nhân</a></li>
           <li><a class="dropdown-item" href="/editor/{{currentUser._id}}/editorNews"><i class="bi bi-briefcase"></i>
               Không gian làm việc</a></li>
           {{/if}}
 
           {{#if (eq currentUser.role "admin")}}
-          <li><a class="dropdown-item" href="/admin/{{currentUser._id}}/profile"><i class="bi bi-person"></i>
-              Hồ sơ cá nhân</a></li>
           <li><a class="dropdown-item" href="/admin/{{currentUser._id}}/"><i class="bi bi-gear"></i> Không
               gian làm việc</a></li>
           {{/if}}
@@ -117,20 +109,24 @@
     <ul class="nav justify-content-center shadow p-3 mb-5 bg-body rounded nav-color">
       <div class="d-flex justify-content-between body">
         <li class="nav-item">
-          <a class="nav-link {{#if (eq activePage "category")}}active{{/if}}" aria-current="page" href="/admin/mainCategories">Chuyên mục</a>
+          <a class="nav-link {{#if (eq activePage " category")}}active{{/if}}" aria-current="page"
+            href="/admin/mainCategories">Chuyên mục</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{#if (eq activePage "tag")}}active{{/if}}" aria-current="page" href="/admin/tags">Tag</a>
+          <a class="nav-link {{#if (eq activePage " tag")}}active{{/if}}" aria-current="page" href="/admin/tags">Tag</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{#if (eq activePage "news")}}active{{/if}}" aria-current="page" href="/admin/news">Bài viết</a>
+          <a class="nav-link {{#if (eq activePage " news")}}active{{/if}}" aria-current="page" href="/admin/news">Bài
+            viết</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{#if (eq activePage "users")}}active{{/if}}" aria-current="page" href="/admin/users">Người
+          <a class="nav-link {{#if (eq activePage " users")}}active{{/if}}" aria-current="page"
+            href="/admin/users">Người
             dùng</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{#if (eq activePage "premium")}}active{{/if}}" aria-current="page" href="/admin/premiums">Duyệt Premium</a>
+          <a class="nav-link {{#if (eq activePage " premium")}}active{{/if}}" aria-current="page"
+            href="/admin/premiums">Duyệt Premium</a>
         </li>
       </div>
     </ul>

@@ -28,7 +28,6 @@ mongoose.connect(dbUrl)
 .then(() => console.log('MongoDB connected'))
 .catch((err) => console.error('Error connecting to MongoDB:', err));
 
-
 //Set up view engine
 app.engine('hbs', engine({
   handlebars: allowInsecurePrototypeAccess(Handlebars),
@@ -135,7 +134,6 @@ app.engine('hbs', engine({
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views') );
 
-
 // Middleware setup
 app.use(express.static(path.join(__dirname, 'public'))); //serve static file
 app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
@@ -231,7 +229,6 @@ app.use('/editor',editorRoutes);
 app.use('/admin', adminRoutes)
 app.use('/api', apiRoutes);
 app.use('/', generalRoutes);
-
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))

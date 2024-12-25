@@ -77,14 +77,15 @@
                 Bình luận
             </div>
             <hr class="mt-1">
-            <form action="" method="post">
+            {{#if currentUser}}
+               <form action="" method="post">
                 <div class="input-group flex-nowrap mb-3">
                     <input name="comment" type="text" class="form-control" placeholder="Chia sẻ ý kiến của bạn" aria-label=""
                         aria-describedby="addon-wrapping">
                         <button type="submit">submit</button>
                 </div>
-            </form>
-
+                </form>
+            {{/if}}
             <!-- Danh sách những bình luận -->
             <div>
                 <div class="my-3">

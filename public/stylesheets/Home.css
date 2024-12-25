@@ -143,8 +143,7 @@
 
 .news-item {
     flex: 0 0 25%; /* Fixed width for consistent layout */
-    width: 400px;
-    height: 400;
+    height: 550px;
     padding: 15px;
     margin: 0; /* Remove additional margins */
     box-sizing: border-box;
@@ -156,7 +155,6 @@
     flex-direction: column;
     justify-content: space-between;
 }
-
 
 .news-item:hover {
     transform: scale(1.05);

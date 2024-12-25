@@ -491,7 +491,6 @@ module.exports.editUser = async (req, res) => {
             if (!user.bio) {
                 user.bio = 'Nothing to show';
             }
-            console.log(user);
             user.role = role;
             await user.save();
         }

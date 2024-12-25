@@ -4,30 +4,30 @@ module.exports = new GitHubStrategy(
   {
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: '/account/signIn/githubAuth/callback',
+    callbackURL:"http://fourpnews.onrender.com/account/signIn/githubAuth/callback",
     scope: ['user:email']
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
-      // Check if a user with this GitHub ID already exists
-      let user = await User.findOne({ githubId: profile.id }).exec();
+      let user = await User.findOne({ githubId: profile.id });
       if (!user) {
-        // Check if a user with the same email already exists
-        user = await User.findOne({ email: profile.emails[0].value }).exec();
+        user = await User.findOne({ email: profile.emails[0].value });
         if (user) {
-          // If a user exists, link their GitHub ID and save
           user.githubId = profile.id;
           await user.save();
         } else {
-          // If not, create a new user
+          const email = profile.emails[0].value;
+          const username = email.split('@')[0]; // Generate username from email
           user = await User.create({
             githubId: profile.id,
-            email: profile.emails[0].value,
+            email: email,
             fullName: profile.displayName || profile.username,
+            username: username // Set username
           });
         }
+      } else {
+        done(null, user);
       }
-      // Pass the user to Passport
       done(null, user);
     } catch (error) {
       done(error);
