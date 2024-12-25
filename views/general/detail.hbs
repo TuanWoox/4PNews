@@ -6,6 +6,7 @@
 {{/section}}
 
 <div class="d-flex justify-content-between">
+    <div class="left-body"></div>
     <div class="body">
         <div class="d-flex justify-content-between align-items-center">
             <a class="logo me-3" aria-current="page" href="/category/{{news.category._id}}">{{news.category.name}}</a>
@@ -17,7 +18,7 @@
                 {{/if}}
             </div>
         </div>
-        <div class="d-flex justify-content-center align-items-center mt-2">
+        <div class="d-flex justify-content-between align-items-center mt-2">
             <div>
                 {{#each news.tags}}
                 <a href="/tag/{{_id}}" type="button" class="btn btn-outline-primary">
@@ -34,7 +35,6 @@
             </div>
         </div>
         <div id="sectionToDowload" data-name="News Article">
-
             <div class="post-title mt-2">
                 <h1>{{news.title}}</h1>
             </div>
@@ -112,6 +112,7 @@
                                     <p class="card-text">{{content}}</p>
                                 </div>
                             </div>
+                            <p class="card-text">{{content}}</p>
                         </div>
                     </div>
                 </div>
@@ -155,6 +156,7 @@
             {{/each}}
         </div>
     </div>
+    <div class="right-body"></div>
 </div>
 
 {{#section 'js'}}
