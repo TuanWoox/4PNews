@@ -61,26 +61,40 @@ module.exports.isAdmin = async (req,res,next) => {
     }
     next();
 }
-module.exports.premiumNews = async (req,res,next) => {
-    const news = await News.findById(req.params.newsId);
-    if(news.isPremium)
-    {
-    if(!req.isAuthenticated())
-    {
-            req.session.returnTo = req.originalUrl; 
-            req.flash('error','Bạn chưa đăng nhập!!!');
-            return res.redirect('/account/signIn');
-    } else {
-        let now = new Date();
+module.exports.premiumNews = async (req, res, next) => {
+    try {
         const news = await News.findById(req.params.newsId);
-        console.log(news);
-        if(req.user.role === "user" && req.user.premium && req.user.premium < now && news.isPremium ) 
-        {
-                req.session.returnTo = req.originalUrl; 
-                req.flash('error','Bạn chưa gia hạn premium');
-                return res.redirect('/');
-        } 
+
+        if (!news.isPremium) {
+            return next(); // If the news is not premium, skip further checks
+        }
+
+        // Check if the user is authenticated
+        if (!req.isAuthenticated()) {
+            req.session.returnTo = req.originalUrl; 
+            req.flash('error', 'Bạn chưa đăng nhập!!!');
+            return res.redirect('/account/signIn');
+        }
+
+        const now = new Date();
+        const user = req.user;
+
+        // Check if the user has a premium subscription
+        if (!user.premium || user.premium < now) {
+            req.session.returnTo = req.originalUrl; 
+            req.flash('error', 'Bạn chưa gia hạn premium');
+            return res.redirect('/');
+        }
+
+        // Check if user role is "user" and ensure premium subscription is valid
+        if (user.role === "user" && user.premium && user.premium < now) {
+            req.session.returnTo = req.originalUrl; 
+            req.flash('error', 'Bạn chưa gia hạn premium');
+            return res.redirect('/');
+        }
+
+        next(); // Proceed to the next middleware
+    } catch (err) {
+        next(err); // Pass error to the error handler
     }
-    }
-    next();
-}
+};
