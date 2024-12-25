@@ -293,6 +293,7 @@ module.exports.editANews = async (req, res) => {
     news.content = req.body.news.content;
     news.isPremium = req.body.news.premium === 'true';
     news.category = req.body.news.category;
+    news.status = "draft";
     await news.save();
     req.flash('success', 'Sửa bài viết thành công')
     res.redirect(`/writer/${req.params.id}/viewNews/${req.params.newsId}`);
