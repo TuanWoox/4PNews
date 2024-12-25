@@ -71,8 +71,12 @@
               <h5 class="card-title">
                 <a href="/writer/{{author}}/viewNews/{{_id}}" style="text-decoration: none; color: black;">
                   {{title}}
+                  {{#if isPremium}}
+                  <span class="badge bg-warning text-dark">Premium</span>
+                  {{/if}}
                 </a>
               </h5>
+
               <p class="card-text">
                 {{brief}}
               </p>

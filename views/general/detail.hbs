@@ -1,74 +1,80 @@
 {{#section 'css'}}
-  <title>{{news.title}}</title>
-  <link rel="icon" href="/images/icon.png">
-  <link rel="stylesheet" href="/stylesheets/writer/viewNews.css">
-  <link rel="stylesheet" href="/stylesheets/general.css">
+<title>{{news.title}}</title>
+<link rel="icon" href="/images/icon.png">
+<link rel="stylesheet" href="/stylesheets/writer/viewNews.css">
+<link rel="stylesheet" href="/stylesheets/general.css">
 {{/section}}
 
 <div class="d-flex justify-content-between">
-        <div class="left-body"></div>
-        <div class="body">
-            <div class="d-flex justify-content-between align-items-center">
-                <a class="logo me-3" aria-current="page" href="/category/{{news.category._id}}">{{news.category.name}}</a>
-                <div class="card-text">
+    <div class="left-body"></div>
+    <div class="body">
+        <div class="d-flex justify-content-between align-items-center">
+            <a class="logo me-3" aria-current="page" href="/category/{{news.category._id}}">{{news.category.name}}</a>
+            <div class="card-text">
                 {{#if news.createdAt}}
                 <small class="text-muted">{{convertToDisplayDate news}}</small>
                 {{else}}
                 <small class="text-muted">No Date Available</small>
                 {{/if}}
-                </div>
             </div>
-            <div class="d-flex justify-content-between align-items-center mt-2">
-                <div>
-                    {{#each news.tags}}
-                        <a href="/tag/{{_id}}" type="button" class="btn btn-outline-primary">
-                            {{name}}
-                        </a>
-                    {{/each}}
-                </div>
-                <div>
-                    {{#if news.isPremium}}
-                        <span class="status text-premium">Premium</span>
-                        <i class="bi bi-arrow-down-square-fill" id="download-icon" style="cursor: pointer;"
-                            title="Download as PDF"></i>
-                    {{/if}}
-                </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-2">
+            <div>
+                {{#each news.tags}}
+                <a href="/tag/{{_id}}" type="button" class="btn btn-outline-primary">
+                    {{name}}
+                </a>
+                {{/each}}
             </div>
-            <div class="post-title mt-2"><h1>{{news.title}}</h1></div>
+            <div>
+                {{#if news.isPremium}}
+                <span class="status text-premium">Premium</span>
+                <i class="bi bi-arrow-down-square-fill" id="download-icon" style="cursor: pointer;"
+                    title="Download as PDF"></i>
+                {{/if}}
+            </div>
+        </div>
+        <div id="sectionToDowload" data-name="News Article">
+
+            <div class="post-title mt-2">
+                <h1>{{news.title}}</h1>
+            </div>
+            <div class="post-title mt-2">
+                <h5>{{news.brief}}</h5>
+            </div>
             <div class="post-content mt-2">
-                <div class="mb-2">
-                    <h3>Nội dung bài viết</h3>
-                </div>
                 <div>
                     {{{news.content}}}
                 </div>
             </div>
-            <div class="card my-5">
-                <div class="row g-0">
-                    <div class="col-md-2">
-                        {{#if news.author.profilePic.url}}
-                        <img src="{{news.author.profilePic.url}}" class="img-thumbnail rounded-start" alt="..." />
-                        {{else}}
-                        <img src="/images/user.png" class="img-thumbnail rounded-start" alt="No Profile Picture" />
-                        {{/if}}
-                    </div>
-                    <div class="col-md-10">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <div class="author-title ps-0"><a href="/user/{{news.author._id}}/profile" style="text-decoration: none;">{{news.author.penName}}</a></div>
-                                <div class="author-title">
-                                    Tác giả
-                                    <i class="bi bi-pencil ms-2"></i>
-                                </div>
+        </div>
+        <div class="card my-5">
+            <div class="row g-0">
+                <div class="col-md-2">
+                    {{#if news.author.profilePic.url}}
+                    <img src="{{news.author.profilePic.url}}" class="img-thumbnail rounded-start" alt="..." />
+                    {{else}}
+                    <img src="/images/user.png" class="img-thumbnail rounded-start" alt="No Profile Picture" />
+                    {{/if}}
+                </div>
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="author-title ps-0"><a href="/user/{{news.author._id}}/profile"
+                                    style="text-decoration: none;">{{news.author.penName}}</a></div>
+                            <div class="author-title">
+                                Tác giả
+                                <i class="bi bi-pencil ms-2"></i>
                             </div>
-                            <p class="card-text">{{news.author.bio}}</p>
                         </div>
+                        <p class="card-text">{{news.author.bio}}</p>
                     </div>
                 </div>
             </div>
-            <div class="control my-3 mx-5">
-                <div class="row-1 control d-flex">
-                  <a type="button" href="/" class="btn btn-info min-width mx-2">
+        </div>
+        <div class="control my-3 mx-5">
+            <div class="row-1 control d-flex">
+                <a type="button" href="/" class="btn btn-info min-width mx-2">
                     Quay lại
                   </a>
                 </div>
@@ -107,68 +113,74 @@
                                     <p class="card-text">{{content}}</p>
                                 </div>
                             </div>
-                        </div>
-                    {{/each}}
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="post-title">
-                    Bài viết liên quan
-                </div>
-                <div>
-                    <button type="button" class="btn btn-outline-primary">
-                        <i class="bi bi-arrow-left"></i>
-                    </button>
-                    <button type="button" class="btn btn-outline-primary">
-                        <i class="bi bi-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            <hr class="mt-1">
-            <div class="row row-cols-1 row-cols-md-4 g-4 ">
-                {{#each relevantNews}}
-                    <div class="col">
-                        <div class="card h-100">
-                            <img src="{{thumbnail}}"
-                                class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="/category/{{category._id}}" class="text-decoration-none"><h5 class="nav-link ps-0">{{category.name}}</h5></a>
-                                <a href="/detail/{{_id}}" class="nav-link ps-0"><h5>{{title}}</h5></a>
-                                <p class="card-text">{{brief}}</p>
-                            </div>
-                            <div class="card-footer">
-                                <small class="text-muted">Last updated {{timesince publish.publishedDate}}</small>
-                            </div>
+                            <p class="card-text">{{content}}</p>
                         </div>
                     </div>
+                </div>
                 {{/each}}
             </div>
         </div>
-        <div class="right-body"></div>
+
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="post-title">
+                Bài viết liên quan
+            </div>
+            <div>
+                <button type="button" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button type="button" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+        <hr class="mt-1">
+        <div class="row row-cols-1 row-cols-md-4 g-4 ">
+            {{#each relevantNews}}
+            <div class="col">
+                <div class="card h-100">
+                    <img src="{{thumbnail}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <a href="/category/{{category._id}}" class="text-decoration-none">
+                            <h5 class="nav-link ps-0">{{category.name}}</h5>
+                        </a>
+                        <a href="/detail/{{_id}}" class="nav-link ps-0">
+                            <h5>{{title}}</h5>
+                        </a>
+                        <p class="card-text">{{brief}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Last updated {{timesince publish.publishedDate}}</small>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
     </div>
+    <div class="right-body"></div>
+</div>
 
 {{#section 'js'}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const downloadIcon = document.getElementById('download-icon');
-    if (downloadIcon) {
-      downloadIcon.addEventListener('click', () => {
-        const sectionToDownload = document.getElementById('sectionToDowload'); // Target the specific section
-        const title = sectionToDownload.getAttribute('data-name');
-        const options = {
-          margin: 1, // Adjust margins as needed
-          filename: title + ' preview',
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true },
-          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-        };
+    document.addEventListener('DOMContentLoaded', () => {
+        const downloadIcon = document.getElementById('download-icon');
+        if (downloadIcon) {
+            downloadIcon.addEventListener('click', () => {
+                const sectionToDownload = document.getElementById('sectionToDowload'); // Target the specific section
+                const title = sectionToDownload.getAttribute('data-name');
+                const options = {
+                    margin: 1, // Adjust margins as needed
+                    filename: title + ' preview',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
 
-        html2pdf().set(options).from(sectionToDownload).save(); // Convert only the targeted section to PDF
-      });
-    }
-  });
+                html2pdf().set(options).from(sectionToDownload).save(); // Convert only the targeted section to PDF
+            });
+        }
+    });
 
 </script>
 {{/section}}

@@ -1,6 +1,6 @@
 {{#section 'css'}}
 <link rel="icon" href="/images/icon.png">
-    <title>Trang chủ</title>
+<title>Trang chủ</title>
 {{/section}}
 
 <br>
@@ -23,6 +23,9 @@
                 <a class="nav-link" href="/detail/{{_id}}" target="_blank">Đọc thêm
                     <i class="bi bi-arrow-up-right-square p-2"></i>
                 </a>
+                {{#if isPremium}}
+                <span class="badge bg-warning text-dark">Premium</span>
+                {{/if}}
             </div>
         </div>
         {{/each}}
@@ -39,14 +42,14 @@
 </div>
 <br>
 <div class="d-flex justify-content-between">
-        <div></div>
-        <div class="d-flex  align-items-center" id="sub-nav">
-            <div class="logo px-3">
-                Tin mới nhất
-            </div>
+    <div></div>
+    <div class="d-flex  align-items-center" id="sub-nav">
+        <div class="logo px-3">
+            Tin mới nhất
         </div>
-        <div></div>
     </div>
+    <div></div>
+</div>
 <div class="news-carousel-container" id="carousel-newest">
     <!-- Previous button -->
     <button class="btn btn-outline-primary btn-prev">
@@ -57,25 +60,28 @@
     <div class="news-carousel d-flex justify-content-center overflow-hidden">
         <div class="news-track">
             {{#each listNews}}
-                <div class="news-item" >
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <a class="text-decoration-none" href="/category/{{category._id}}">
-                                <h4 class="nav-link ps-0">{{category.name}}</h4>
-                            </a>
-                        </div>
-                        <img src="{{thumbnail}}" class="card-img-top" alt="{{title}}">
-                        <div class="card-body">
-                            <a class="text-decoration-none" href="/detail/{{_id}}">
-                                <h5 class="nav-link ps-0 text-decoration-none">{{title}}</h5>
-                            </a>
-                            <p class="card-text">{{brief}}</p>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">Last updated {{timesince publish.publishedDate}}</small>
-                        </div>
+            <div class="news-item">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <a class="text-decoration-none" href="/category/{{category._id}}">
+                            <h4 class="nav-link ps-0">{{category.name}}</h4>
+                        </a>
+                    </div>
+                    <img src="{{thumbnail}}" class="card-img-top" alt="{{title}}">
+                    <div class="card-body">
+                        <a class="text-decoration-none" href="/detail/{{_id}}">
+                            <h5 class="nav-link ps-0 text-decoration-none">{{title}}</h5>
+                        </a>
+                        <p class="card-text">{{brief}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Last updated {{timesince publish.publishedDate}}</small>
+                        {{#if isPremium}}
+                        <span class="badge bg-warning text-dark ms-2">Premium</span>
+                        {{/if}}
                     </div>
                 </div>
+            </div>
             {{/each}}
         </div>
     </div>
@@ -106,25 +112,28 @@
     <div class="news-carousel overflow-hidden">
         <div class="d-flex news-track">
             {{#each topHotNews}}
-                <div class="news-item" >
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <a class="text-decoration-none" href="/category/{{category._id}}">
-                                <h4 class="nav-link ps-0">{{category.name}}</h4>
-                            </a>
-                        </div>
-                        <img src="{{thumbnail}}" class="card-img-top" alt="{{title}}">
-                        <div class="card-body">
-                            <a class="text-decoration-none" href="/detail/{{_id}}">
-                                <h5 class="nav-link ps-0 text-decoration-none">{{title}}</h5>
-                            </a>
-                            <p class="card-text">{{brief}}</p>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">Last updated {{timesince publish.publishedDate}}</small>
-                        </div>
+            <div class="news-item">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <a class="text-decoration-none" href="/category/{{category._id}}">
+                            <h4 class="nav-link ps-0">{{category.name}}</h4>
+                        </a>
+                    </div>
+                    <img src="{{thumbnail}}" class="card-img-top" alt="{{title}}">
+                    <div class="card-body">
+                        <a class="text-decoration-none" href="/detail/{{_id}}">
+                            <h5 class="nav-link ps-0 text-decoration-none">{{title}}</h5>
+                        </a>
+                        <p class="card-text">{{brief}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Last updated {{timesince publish.publishedDate}}</small>
+                        {{#if isPremium}}
+                        <span class="badge bg-warning text-dark ms-2">Premium</span>
+                        {{/if}}
                     </div>
                 </div>
+            </div>
             {{/each}}
         </div>
     </div>
@@ -155,33 +164,37 @@
     <div class="news-carousel overflow-hidden">
         <div class="d-flex news-track">
             {{#each topSubCategoriesWithNews}}
-                    <div class="news-item" >
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <a class="text-decoration-none" href="/category/{{_id}}">
-                                    <h4 class="nav-link ps-0">{{name}}</h4>
-                                </a>
-                            </div>
-                            <img src="{{news.thumbnail}}" class="card-img-top" alt="{{news.title}}">
-                            <div class="card-body">
-                                <a class="text-decoration-none" href="/detail/{{news._id}}">
-                                    <h5 class="nav-link ps-0 text-decoration-none">{{news.title}}</h5>
-                                </a>
-                                <p class="card-text">{{news.brief}}</p>
-                            </div>
-                            <div class="card-footer">
-                                <small class="text-muted">Last updated {{timesince news.publish}}</small>
-                            </div>
-                        </div>
+            <div class="news-item">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <a class="text-decoration-none" href="/category/{{_id}}">
+                            <h4 class="nav-link ps-0">{{name}}</h4>
+                        </a>
                     </div>
+                    <img src="{{news.thumbnail}}" class="card-img-top" alt="{{news.title}}">
+                    <div class="card-body">
+                        <a class="text-decoration-none" href="/detail/{{news._id}}">
+                            <h5 class="nav-link ps-0 text-decoration-none">{{news.title}}</h5>
+                        </a>
+                        <p class="card-text">{{news.brief}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Last updated {{timesince news.publish}}</small>
+                        {{#if news.isPremium}}
+                        <span class="badge bg-warning text-dark ms-2">Premium</span>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
             {{/each}}
         </div>
     </div>
+</div>
 
-    <!-- Next button -->
-    <button class="btn btn-outline-primary btn-next">
-        <i class="bi bi-arrow-right"></i>
-    </button>
+<!-- Next button -->
+<button class="btn btn-outline-primary btn-next">
+    <i class="bi bi-arrow-right"></i>
+</button>
 </div>
 
 

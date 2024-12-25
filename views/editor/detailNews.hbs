@@ -1,100 +1,134 @@
 {{#section 'css'}}
-    <link rel="stylesheet" href="/stylesheets/editor/detail_editor.css">
+<link rel="stylesheet" href="/stylesheets/editor/detail_editor.css">
 {{/section}}
-    <!-- body -->
-    <div class="container my-3">
-      <!-- nội dung -->
-      <div
-        class="border-bottom border-dark border-3"
-      >
-        <div class="left-body"></div>
-        <div class="body">
-          <div class="d-flex justify-content-between align-items-center">
-            <a class="logo me-3" aria-current="page" href="#">{{news.category.name}}</a>
-            <div class="card-text">
-              <small class="text-muted">{{convertToDisplayDate news}}</small>
-            </div>
-          </div>
-          <div class="d-flex justify-content-between align-items-center mt-2">
-            <div>
-              {{#each news.tags}}
-              <button type="button" class="btn btn-outline-primary">
-                {{name}}
-              </button>
-              {{/each}}
-
-            </div>
-          </div>
-          <div class="post-title mt-2">
-            <h1>{{news.title}}</h1>
-          </div>
-          <div class="post-content mt-2">
-            <div class="mb-2"><h4>Nội dung bài viết</h4></div>
-            <div>
-              {{{news.content}}}
-            </div>
-          </div>
-          <div class="card my-5">
-            <div class="row g-0">
-              <div class="col-md-2">
-                <img {{#if news.author.profilePic.url}} src="{{news.author.profilePic.url}}" {{else}} src="/images/user.png"
-                    {{/if}} alt="avatar" class="img-thumbnail rounded-start mb-3" id="avatarDisplay"/>
-              </div>
-              <div class="col-md-10">
-                <div class="card-body">
-                  <div
-                    class="d-flex justify-content-between align-items-center mb-2"
-                  >
-                    <div class="author-title ps-0"><h5>{{news.author.penName}}</h5></div>
-                    <div class="author-title">
-                      Tác giả
-                      <i class="bi bi-pencil ms-2"></i>
-                    </div>
-                  </div>
-                  <p class="card-text">
-                        {{news.author.bio}}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+<!-- body -->
+<div class="container my-3">
+  <!-- nội dung -->
+  <div class="border-bottom border-dark border-3">
+    <div class="left-body"></div>
+    <div class="body">
+      <div class="d-flex justify-content-between align-items-center">
+        <a class="logo me-3" aria-current="page" href="#">{{news.category.name}}</a>
+        <div class="card-text">
+          <small class="text-muted">{{convertToDisplayDate news}}</small>
         </div>
       </div>
-      <!-- button -->
-      <div class="control my-3 mx-3">
-        <div class="row-1 control d-flex justify-content-end">
-          <a type="button" class="btn btn-info min-width mx-2" href="/editor/{{currentUser._id}}/editorNews">
-            Quay lại
-          </a>
-          {{#if (eq news.status 'draft')}}
-            <a type="button" class="btn btn-danger min-width mx-2" href="/editor/{{currentUser._id}}/editorNews/{{news._id}}/reject">
-              Từ chối
-            </a>
-            <a type="button" class="btn btn-success btn-push min-width mx-2" href="/editor/{{currentUser._id}}/editorNews/{{news._id}}/approve">
-              Duyệt bài
-            </a>
+      <div class="d-flex justify-content-between align-items-center mt-2">
+        <div>
+          {{#each news.tags}}
+          <button type="button" class="btn btn-outline-primary">
+            {{name}}
+          </button>
+          {{/each}}
+
+        </div>
+        <div>
+          {{#if news.isPremium}}
+          <span class="badge bg-warning text-dark">Premium</span>
+          <i class="bi bi-arrow-down-square-fill" id="download-icon" style="cursor: pointer;"
+            title="Download as PDF"></i>
           {{/if}}
         </div>
-        <!-- Overlay-->
-        <div id="overlay" class="overlay">
-          <div class="overlay-content">
-            <!-- <span id="close-overlay" class="close-btn">&times;</span> -->
-            <div
-              class="navbar-brand d-flex align-items-center justify-content-center logo"
-            >
-              <div class="d-inline-block me-2 logo-icon">4P</div>
-              NEWS
+      </div>
+      <div id="sectionToDowload" data-name="News Article">
+      <div class="post-title mt-2">
+        <h1>{{news.title}}</h1>
+      </div>
+      <div class="post-content mt-2">
+        <div class="mb-2">
+          <h4>Nội dung bài viết</h4>
+        </div>
+        <div>
+          {{{news.content}}}
+        </div>
+      </div>
+      </div>
+      <div class="card my-5">
+        <div class="row g-0">
+          <div class="col-md-2">
+            <img {{#if news.author.profilePic.url}} src="{{news.author.profilePic.url}}" {{else}} src="/images/user.png"
+              {{/if}} alt="avatar" class="img-thumbnail rounded-start mb-3" id="avatarDisplay" />
+          </div>
+          <div class="col-md-10">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="author-title ps-0">
+                  <h5>{{news.author.penName}}</h5>
+                </div>
+                <div class="author-title">
+                  Tác giả
+                  <i class="bi bi-pencil ms-2"></i>
+                </div>
+              </div>
+              <p class="card-text">
+                {{news.author.bio}}
+              </p>
             </div>
-            <i class="bi bi-check-circle text-success"></i>
-            <h3 class="text-success">Duyệt bài thành công.</h3>
-            <button
-              type="button"
-              id="close-overlay"
-              class="btn btn-success mx-2"
-            >
-              Xác nhận
-            </button>
           </div>
         </div>
       </div>
     </div>
+  </div>
+  <!-- button -->
+  <div class="control my-3 mx-3">
+    <div class="row-1 control d-flex justify-content-end">
+      <a type="button" class="btn btn-info min-width mx-2" href="/editor/{{currentUser._id}}/editorNews">
+        Quay lại
+      </a>
+      {{#if (eq news.status 'draft')}}
+      <a type="button" class="btn btn-danger min-width mx-2"
+        href="/editor/{{currentUser._id}}/editorNews/{{news._id}}/reject">
+        Từ chối
+      </a>
+      <a type="button" class="btn btn-success btn-push min-width mx-2"
+        href="/editor/{{currentUser._id}}/editorNews/{{news._id}}/approve">
+        Duyệt bài
+      </a>
+      {{/if}}
+    </div>
+    <!-- Overlay-->
+    <div id="overlay" class="overlay">
+      <div class="overlay-content">
+        <!-- <span id="close-overlay" class="close-btn">&times;</span> -->
+        <div class="navbar-brand d-flex align-items-center justify-content-center logo">
+          <div class="d-inline-block me-2 logo-icon">4P</div>
+          NEWS
+        </div>
+        <i class="bi bi-check-circle text-success"></i>
+        <h3 class="text-success">Duyệt bài thành công.</h3>
+        <button type="button" id="close-overlay" class="btn btn-success mx-2">
+          Xác nhận
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{{#section 'js'}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const downloadIcon = document.getElementById('download-icon');
+    if (downloadIcon) {
+      downloadIcon.addEventListener('click', () => {
+        const sectionToDownload = document.getElementById('sectionToDowload'); // Ensure this ID matches the target element
+        if (!sectionToDownload) {
+          alert('Section to download not found.');
+          return;
+        }
+        const title = sectionToDownload.getAttribute('data-name') || 'default-title';
+        const options = {
+          margin: 1, // Adjust margins as needed
+          filename: `${title} preview.pdf`,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        html2pdf().set(options).from(sectionToDownload).save();
+      });
+    }
+  });
+
+
+</script>
+{{/section}}

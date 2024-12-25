@@ -144,6 +144,7 @@
 .news-item {
     flex: 0 0 25%; /* Fixed width for consistent layout */
     height: 550px;
+    height: 550px;
     padding: 15px;
     margin: 0; /* Remove additional margins */
     box-sizing: border-box;

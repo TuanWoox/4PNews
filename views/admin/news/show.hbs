@@ -5,40 +5,48 @@
             <a class="logo me-3" aria-current="page" href="#">{{news.category.name}}</a>
             <div>
                 {{#if (eq news.status 'published')}}
-                   <div class="card-text text-muted text-end">Trạng thái: Đã xuất bản</div>
-                    <div class="card-text text-muted text-end">Ngày xuất bản: {{convertToDisplayPublishedDate news.publish.publishedDate}}</div>
+                <div class="card-text text-muted text-end">Trạng thái: Đã xuất bản</div>
+                <div class="card-text text-muted text-end">Ngày xuất bản: {{convertToDisplayPublishedDate
+                    news.publish.publishedDate}}</div>
                 {{/if}}
                 {{#if (eq news.status 'draft')}}
-                   <div class="card-text text-muted text-end">Trạng thái: Đang chờ duyệt</div>
+                <div class="card-text text-muted text-end">Trạng thái: Đang chờ duyệt</div>
                 {{/if}}
                 {{#if (eq news.status 'rejected')}}
-                   <div class="card-text text-danger">Đã bị từ chối</div>
+                <div class="card-text text-danger">Đã bị từ chối</div>
                 {{/if}}
-                
+
             </div>
         </div>
         <div class="d-flex justify-content-between align-items-center mt-2">
             <div>
                 {{#each news.tags}}
-                     <button type="button" class="btn btn-outline-primary">{{name}}</button>
+                <button type="button" class="btn btn-outline-primary">{{name}}</button>
                 {{/each}}
-              
-            </div>
-        </div>
-        <div class="post-title mt-2">{{news.title}}</div>
-        <div class="post-content mt-2">
-            <div class="mb-2">
-                {{news.brief}}
             </div>
             <div>
-                {{{news.content}}}
+                {{#if news.isPremium}}
+                <span class="badge bg-warning text-dark">Premium</span>
+                <i class="bi bi-arrow-down-square-fill" id="download-icon" style="cursor: pointer;"
+                    title="Download as PDF"></i>
+                {{/if}}
+            </div>
+        </div>
+        <div id="sectionToDowload" data-name="News Article">
+            <div class="post-title mt-2">{{news.title}}</div>
+            <div class="post-content mt-2">
+                <div class="mb-2">
+                    {{news.brief}}
+                </div>
+                <div>
+                    {{{news.content}}}
+                </div>
             </div>
         </div>
         <div class="card my-5">
             <div class="row g-0">
                 <div class="col-md-2">
-                    <img src="{{news.author.profilePic.url}}"
-                        class="img-thumbnail rounded-start" alt="...">
+                    <img src="{{news.author.profilePic.url}}" class="img-thumbnail rounded-start" alt="...">
                 </div>
                 <div class="col-md-10">
                     <div class="card-body">
@@ -61,20 +69,49 @@
                 Quay lại chuyên mục
             </a>
             <form action="/admin/news/{{news._id}}?_method=DELETE" method="POST">
-            <button type="" class="btn btn-outline-danger me-3">
-                Xóa
-            </button>
+                <button type="" class="btn btn-outline-danger me-3">
+                    Xóa
+                </button>
             </form>
             {{#if (eq news.status 'draft')}}
-                <form action="/admin/news/{{news._id}}?_method=PATCH" method="POST">
+            <form action="/admin/news/{{news._id}}?_method=PATCH" method="POST">
                 <button type="" class="btn btn-outline-success me-3">
                     Xuất bản ngay
                 </button>
-                </form>
+            </form>
             <a href="/admin/news/{{news._id}}/rejectNews" class="btn btn-outline-danger me-3">Từ chối</a>
-            {{/if}} 
+            {{/if}}
         </div>
         <hr>
     </div>
     <div class="right-body"></div>
 </div>
+{{#section 'js'}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const downloadIcon = document.getElementById('download-icon');
+        if (downloadIcon) {
+            downloadIcon.addEventListener('click', () => {
+                const sectionToDownload = document.getElementById('sectionToDowload'); // Ensure this ID matches the target element
+                if (!sectionToDownload) {
+                    alert('Section to download not found.');
+                    return;
+                }
+                const title = sectionToDownload.getAttribute('data-name') || 'default-title';
+                const options = {
+                    margin: 1, // Adjust margins as needed
+                    filename: `${title} preview.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+
+                html2pdf().set(options).from(sectionToDownload).save();
+            });
+        }
+    });
+
+
+</script>
+{{/section}}

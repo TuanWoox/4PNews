@@ -44,7 +44,13 @@
                             <!-- Make the title clickable -->
                             <a href="/editor/{{../currentUser._id}}/editorNews/{{this._id}}"
                                 class="text-decoration-none">
-                                <h3 class="card-title">{{this.title}}</h3>
+                                <h3 class="card-title">
+                                    {{this.title}}
+                                    <!-- Premium Label -->
+                                    {{#if this.isPremium}}
+                                    <span class="badge bg-warning text-dark ms-2">Premium</span>
+                                    {{/if}}
+                                </h3>
                             </a>
                             <p class="card-text">{{this.brief}}</p>
                             <p class="card-text">
@@ -67,16 +73,15 @@
                             <!-- Add News Status Here -->
                             <p class="card-text text-end mt-4">
                                 <span class="badge 
-                                          {{#if (eq this.status 'draft')}} bg-secondary
-                                          {{else if (eq this.status 'approved')}} bg-success
-                                          {{else if (eq this.status 'published')}} bg-primary
-                                          {{else if (eq this.status 'rejected')}} bg-danger
-                                          {{else}} bg-warning
-                                          {{/if}} py-2 px-3 fs-6">
+                                      {{#if (eq this.status 'draft')}} bg-secondary
+                                      {{else if (eq this.status 'approved')}} bg-success
+                                      {{else if (eq this.status 'published')}} bg-primary
+                                      {{else if (eq this.status 'rejected')}} bg-danger
+                                      {{else}} bg-warning
+                                      {{/if}} py-2 px-3 fs-6">
                                     {{this.status}}
                                 </span>
                             </p>
-
                         </div>
                     </div>
                 </div>
@@ -84,31 +89,33 @@
         </div>
     </div>
     {{/each}}
+
     <div class="btn_change_page d-flex justify-content-center align-items-center">
-      <nav aria-label="Page navigation">
-        <ul class="pagination">
-          <!-- Previous Button -->
-          <li class="page-item {{#if (eq currentPage 1)}}disabled{{/if}}">
-            <a class="page-link" href="?status={{status}}&page={{subtract currentPage 1}}" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <!-- Previous Button -->
+                <li class="page-item {{#if (eq currentPage 1)}}disabled{{/if}}">
+                    <a class="page-link" href="?status={{status}}&page={{subtract currentPage 1}}"
+                        aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
 
-          <!-- Page Numbers -->
-          {{#each (range 1 totalPages)}}
-          <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
-            <a class="page-link" href="?status={{../status}}&page={{this}}">{{this}}</a>
-          </li>
-          {{/each}}
+                <!-- Page Numbers -->
+                {{#each (range 1 totalPages)}}
+                <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+                    <a class="page-link" href="?status={{../status}}&page={{this}}">{{this}}</a>
+                </li>
+                {{/each}}
 
-          <!-- Next Button -->
-          <li class="page-item {{#if (eq currentPage totalPages)}}disabled{{/if}}">
-            <a class="page-link" href="?status={{status}}&page={{add currentPage 1}}" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+                <!-- Next Button -->
+                <li class="page-item {{#if (eq currentPage totalPages)}}disabled{{/if}}">
+                    <a class="page-link" href="?status={{status}}&page={{add currentPage 1}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
     {{/if}}
