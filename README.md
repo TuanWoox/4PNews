@@ -109,22 +109,5 @@ The application follows a clean **Model-View-Controller (MVC)** architecture:
 
 ---
 
-## 📝 Documentation
-
-Additional documentation for developers can be found in the [docs](./docs) directory.
-
----
-
-## 👥 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
----
 
 <p align="center">Made with ❤️ by the 4P News Team</p>
